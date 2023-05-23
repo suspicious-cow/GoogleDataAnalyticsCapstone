@@ -387,6 +387,8 @@ display: none;
 <li><a href="#structure-of-the-data" id="toc-structure-of-the-data">Structure of the Data</a></li>
 <li><a href="#missing-values" id="toc-missing-values">Missing
 Values</a></li>
+<li><a href="#summary-statistics" id="toc-summary-statistics">Summary
+Statistics</a></li>
 </ul></li>
 <li><a href="#appendix" id="toc-appendix">Appendix</a>
 <ul>
@@ -591,7 +593,338 @@ statistic (imputation), or removing rows.</p>
 <code>start</code> and <code>end</code> station names and IDs could
 indicate inconsistencies in data collection or recording. This may
 require further investigation to ensure that any analyses we conduct on
-this data are valid and reliable.</p>
+this data are valid.</p>
+</div>
+<div id="summary-statistics" class="section level2">
+<h2>Summary Statistics</h2>
+<p>Finally, we run some summary statistics to get an overall view of the
+data makeup and how we might approach our analysis.</p>
+<pre class="r"><code># Print detailed summary statistics of the dataframe
+skim(combined_data_df)</code></pre>
+<table>
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">combined_data_df</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">6230310</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">13</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="left">5</td>
+</tr>
+<tr class="odd">
+<td align="left">factor</td>
+<td align="left">2</td>
+</tr>
+<tr class="even">
+<td align="left">numeric</td>
+<td align="left">4</td>
+</tr>
+<tr class="odd">
+<td align="left">POSIXct</td>
+<td align="left">2</td>
+</tr>
+<tr class="even">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table style="width:100%;">
+<colgroup>
+<col width="24%" />
+<col width="12%" />
+<col width="18%" />
+<col width="5%" />
+<col width="5%" />
+<col width="7%" />
+<col width="11%" />
+<col width="14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ride_id</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">16</td>
+<td align="right">16</td>
+<td align="right">0</td>
+<td align="right">6230310</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">start_station_name</td>
+<td align="right">902896</td>
+<td align="right">0.86</td>
+<td align="right">3</td>
+<td align="right">64</td>
+<td align="right">0</td>
+<td align="right">1722</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">start_station_id</td>
+<td align="right">903028</td>
+<td align="right">0.86</td>
+<td align="right">3</td>
+<td align="right">36</td>
+<td align="right">0</td>
+<td align="right">1320</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">end_station_name</td>
+<td align="right">964949</td>
+<td align="right">0.85</td>
+<td align="right">3</td>
+<td align="right">64</td>
+<td align="right">0</td>
+<td align="right">1742</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">end_station_id</td>
+<td align="right">965090</td>
+<td align="right">0.85</td>
+<td align="right">3</td>
+<td align="right">36</td>
+<td align="right">0</td>
+<td align="right">1324</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: factor</strong></p>
+<table>
+<colgroup>
+<col width="14%" />
+<col width="10%" />
+<col width="14%" />
+<col width="8%" />
+<col width="9%" />
+<col width="42%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">ordered</th>
+<th align="right">n_unique</th>
+<th align="left">top_counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">rideable_type</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">3</td>
+<td align="left">ele: 3238379, cla: 2809297, doc: 182634</td>
+</tr>
+<tr class="even">
+<td align="left">member_casual</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">2</td>
+<td align="left">mem: 3745586, cas: 2484724</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table style="width:100%;">
+<colgroup>
+<col width="15%" />
+<col width="10%" />
+<col width="15%" />
+<col width="7%" />
+<col width="5%" />
+<col width="7%" />
+<col width="7%" />
+<col width="7%" />
+<col width="7%" />
+<col width="7%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">start_lat</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">41.90</td>
+<td align="right">0.05</td>
+<td align="right">41.64</td>
+<td align="right">41.88</td>
+<td align="right">41.90</td>
+<td align="right">41.93</td>
+<td align="right">42.07</td>
+<td align="left">▁▁▇▇▁</td>
+</tr>
+<tr class="even">
+<td align="left">start_lng</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">-87.65</td>
+<td align="right">0.03</td>
+<td align="right">-87.84</td>
+<td align="right">-87.66</td>
+<td align="right">-87.64</td>
+<td align="right">-87.63</td>
+<td align="right">-87.52</td>
+<td align="left">▁▁▆▇▁</td>
+</tr>
+<tr class="odd">
+<td align="left">end_lat</td>
+<td align="right">6290</td>
+<td align="right">1</td>
+<td align="right">41.90</td>
+<td align="right">0.07</td>
+<td align="right">0.00</td>
+<td align="right">41.88</td>
+<td align="right">41.90</td>
+<td align="right">41.93</td>
+<td align="right">42.37</td>
+<td align="left">▁▁▁▁▇</td>
+</tr>
+<tr class="even">
+<td align="left">end_lng</td>
+<td align="right">6290</td>
+<td align="right">1</td>
+<td align="right">-87.65</td>
+<td align="right">0.10</td>
+<td align="right">-88.14</td>
+<td align="right">-87.66</td>
+<td align="right">-87.64</td>
+<td align="right">-87.63</td>
+<td align="right">0.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: POSIXct</strong></p>
+<table>
+<colgroup>
+<col width="13%" />
+<col width="9%" />
+<col width="13%" />
+<col width="18%" />
+<col width="18%" />
+<col width="18%" />
+<col width="8%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">median</th>
+<th align="right">n_unique</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">started_at</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">2022-04-01 00:01:48</td>
+<td align="left">2023-04-30 23:59:05</td>
+<td align="left">2022-08-21 12:55:50</td>
+<td align="right">5242951</td>
+</tr>
+<tr class="even">
+<td align="left">ended_at</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">2022-04-01 00:02:15</td>
+<td align="left">2023-05-03 10:37:12</td>
+<td align="left">2022-08-21 13:20:40</td>
+<td align="right">5257508</td>
+</tr>
+</tbody>
+</table>
+<p>Here are some insights we can glean:</p>
+<ul>
+<li><p><strong>Data dimensions:</strong> The dataset contains 6,230,310
+rows (observations) and 13 columns (variables). It’s a large
+dataset.</p></li>
+<li><p><strong>Variable types:</strong> There are five character
+variables, two factors, four numeric variables, and two POSIXct
+(date-time) variables. This mix of types suggests a varied dataset,
+likely to contain both categorical and continuous data, as well as time
+series data.</p></li>
+<li><p><strong>Missing Values:</strong> The start and end station names
+and IDs have around 15% missing values, given that the complete rate is
+around 0.85. This could be a potential area of concern depending on how
+we want to use this data.</p></li>
+<li><p><strong>Unique Values:</strong> The ride_id variable is unique
+for every row, which suggests that it might be a unique identifier for
+each ride.</p></li>
+<li><p><strong>Rideable Type:</strong> There are three types of bikes
+used in these rides: electric bikes, classic bikes, and docked bikes.
+The most common type of bike used is the electric bike, followed by the
+classic bike.</p></li>
+<li><p><strong>Membership:</strong> There are more rides by members
+(3,745,586) than by casual users (2,484,724).</p></li>
+<li><p><strong>Locations:</strong> The latitude and longitude for start
+and end points of the rides are quite concentrated around certain values
+(41.9 for latitude and -87.6 for longitude), suggesting that most rides
+occur in a relatively confined geographical area.</p></li>
+<li><p><strong>Dates:</strong> The started_at and ended_at fields
+indicate that the data spans from 1st April 2022 to 30th April 2023, so
+just over a year’s worth of ride data.</p></li>
+</ul>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -620,8 +953,8 @@ r</em>. Boston, MA: RStudio, PBC. <a href="http://www.rstudio.com/">http://www.r
 set.seed(1337)
 
 
-# Set the names of the packages and libraries we want to install
-required_libraries &lt;- c(&quot;tidyverse&quot;, &quot;purrr&quot;, &quot;knitr&quot;)
+# Set the names of the packages and libraries you want to install
+required_libraries &lt;- c(&quot;tidyverse&quot;, &quot;purrr&quot;, &quot;knitr&quot;, &quot;skimr&quot;, &quot;readr&quot;)
 
 # Install missing packages and load all required libraries
 for (lib in required_libraries) {
@@ -660,7 +993,11 @@ str(combined_data_df)
 
 
 # Check for missing values
-colSums(is.na(combined_data_df))</code></pre>
+colSums(is.na(combined_data_df))
+
+
+# Print detailed summary statistics of the dataframe
+skim(combined_data_df)</code></pre>
 </div>
 </div>
 

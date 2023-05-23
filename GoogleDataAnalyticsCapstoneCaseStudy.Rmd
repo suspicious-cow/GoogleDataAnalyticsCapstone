@@ -25,8 +25,8 @@ knitr::opts_chunk$set(echo = TRUE)
 set.seed(1337)
 
 
-# Set the names of the packages and libraries we want to install
-required_libraries <- c("tidyverse", "purrr", "knitr")
+# Set the names of the packages and libraries you want to install
+required_libraries <- c("tidyverse", "purrr", "knitr", "skimr", "readr")
 
 # Install missing packages and load all required libraries
 for (lib in required_libraries) {
@@ -224,6 +224,52 @@ station names and IDs could indicate inconsistencies in data collection or
 recording. This may require further investigation to ensure that any analyses 
 we conduct on this data are valid.
 
+## Summary Statistics
+Finally, we run some summary statistics to get an overall view of the data 
+makeup and how we might approach our analysis. 
+
+```{r, echo = TRUE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
+
+# Print detailed summary statistics of the dataframe
+skim(combined_data_df)
+
+```
+
+Here are some insights we can glean:
+
+* __Data dimensions:__ The dataset contains 6,230,310 rows (observations) and 
+13 columns (variables). It's a large dataset.
+
+* __Variable types:__ There are five character variables, two factors, 
+four numeric variables, and two POSIXct (date-time) variables. This mix of types 
+suggests a varied dataset, likely to contain both categorical and continuous 
+data, as well as time series data.
+
+* __Missing Values:__ The start and end station names and IDs have around 15% 
+missing values, given that the complete rate is around 0.85. This could be a 
+potential area of concern depending on how we want to use this data.
+
+* __Unique Values:__ The ride_id variable is unique for every row, which 
+suggests that it might be a unique identifier for each ride.
+
+* __Rideable Type:__ There are three types of bikes used in these rides: 
+electric bikes, classic bikes, and docked bikes. The most common type of bike 
+used is the electric bike, followed by the classic bike.
+
+* __Membership:__ There are more rides by members (3,745,586) than by casual 
+users (2,484,724).
+
+* __Locations:__ The latitude and longitude for start and end points of the 
+rides are quite concentrated around certain values (41.9 for latitude and -87.6 
+for longitude), suggesting that most rides occur in a relatively confined 
+geographical area.
+
+* __Dates:__ The started_at and ended_at fields indicate that the data spans 
+from 1st April 2022 to 30th April 2023, so just over a year's worth of ride 
+data.
+
+
+# Process
 
 
 \newpage
