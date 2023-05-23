@@ -110,12 +110,7 @@ ride_length_metrics <- data.frame(
 # Print the data frame
 print(ride_length_metrics)
 
-
-
-
-
-
-
+# ================================================================
 
 
 # Group by date and count the number of rides each day per group
@@ -156,8 +151,6 @@ ggplot(daily_counts_casual, aes(x = started_date, y = count)) +
 
 # =======================================================================
 
-library(ggplot2)
-
 # Calculate the counts
 member_counts <- member_df %>% group_by(rideable_type) %>% summarise(count = n())
 casual_counts <- casual_df %>% group_by(rideable_type) %>% summarise(count = n())
@@ -173,6 +166,43 @@ ggplot(bike_pref_df, aes(x = rideable_type, y = count, fill = user_type)) +
     geom_bar(stat = "identity", position = "dodge") +
     geom_text(aes(label=count), vjust=-0.3, position = position_dodge(0.9)) +
     labs(x = "Bike Type", y = "Count", fill = "User Type", title = "Bike Type Preference by User Type") +
+    theme_minimal()
+
+
+# =======================================================================
+
+# Group by date, user type and bike type to get counts
+daily_bike_counts <- combined_data_df %>% 
+    group_by(started_date, member_casual, rideable_type) %>%
+    summarise(count = n()) %>%
+    ungroup()
+
+# Now we'll split the data into two dataframes for member and casual
+member_daily_bike_counts <- daily_bike_counts %>% 
+    filter(member_casual == "member")
+
+casual_daily_bike_counts <- daily_bike_counts %>% 
+    filter(member_casual == "casual")
+
+# Define our color palette
+color_palette <- c("classic_bike" = "blue", "electric_bike" = "red", "docked_bike" = "green")
+
+# Plot for Members
+ggplot(member_daily_bike_counts, aes(x = started_date, y = count, color = rideable_type)) +
+    geom_line() +
+    scale_color_manual(values = color_palette) +
+    labs(x = "Date", y = "Number of Rentals", 
+         color = "Bike Type",
+         title = "Daily Bike Type Preferences of Members") +
+    theme_minimal()
+
+# Plot for Casual users
+ggplot(casual_daily_bike_counts, aes(x = started_date, y = count, color = rideable_type)) +
+    geom_line() +
+    scale_color_manual(values = color_palette) +
+    labs(x = "Date", y = "Number of Rentals", 
+         color = "Bike Type",
+         title = "Daily Bike Type Preferences of Casual Users") +
     theme_minimal()
 
 

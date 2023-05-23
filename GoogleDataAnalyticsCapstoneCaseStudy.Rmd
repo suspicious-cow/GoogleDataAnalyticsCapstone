@@ -479,12 +479,24 @@ very flat in the winter months but make up for it in volume during the warmer
 times. If we are looking to convert casual riders to members, an incentive that 
 can be used during the warmer months should be considered. 
 
-## Bike Preferences
+## Bike Preferences Overall
 When we looked at bike preference type, we found that members, marginally, 
 prefer classic bikes. The same is not true for casual riders as they tend to 
 prefer electric bikes. Perhaps some incentives around electric bike rentals 
 should be considered to move casual riders into becoming members. 
 
+NOTE: While the vast majority of bikes are classic or electric, it appears that 
+there are still some with the older designation of docked_bike. A docked bike is 
+a traditional type of shared bike that needs to be picked up and returned to a 
+specific docking station. Docking stations are fixed physical locations 
+distributed throughout a city where bikes are stored. When users are finished 
+with their ride, they must return the bike to one of these stations and dock it 
+correctly for the trip to end.
+
+Cyclistic, which operates in Chicago, uses both docked bikes and "dockless" 
+bikes. Dockless bikes, also called free-floating bikes, can be picked up and 
+left anywhere within a designated area. They have built-in locks and GPS 
+technology that allow the system to keep track of the bikes' locations.
 
 ```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
 
@@ -507,6 +519,54 @@ ggplot(bike_pref_df, aes(x = rideable_type, y = count, fill = user_type)) +
 
 
 ```
+
+## Bike Preferences Over Time
+Looking at bike preferences over time between the two groups we don't see many 
+surprises. However, there is a very notable split in the warmer months where 
+members clearly are choosing classic bikes over electric. This could be due to 
+a host of reasons, not the least of which is simple supply and demand since this 
+is the busiest time of the year for rentals. However, it should be examined to 
+ensure there isn't some other casual factor. 
+
+```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
+
+# Group by date, user type and bike type to get counts
+daily_bike_counts <- combined_data_df %>% 
+    group_by(started_date, member_casual, rideable_type) %>%
+    summarise(count = n()) %>%
+    ungroup()
+
+# Now we'll split the data into two dataframes for member and casual
+member_daily_bike_counts <- daily_bike_counts %>% 
+    filter(member_casual == "member")
+
+casual_daily_bike_counts <- daily_bike_counts %>% 
+    filter(member_casual == "casual")
+
+# Define our color palette
+color_palette <- c("classic_bike" = "blue", "electric_bike" = "red", "docked_bike" = "green")
+
+# Plot for Members
+ggplot(member_daily_bike_counts, aes(x = started_date, y = count, color = rideable_type)) +
+    geom_line() +
+    scale_color_manual(values = color_palette) +
+    labs(x = "Date", y = "Number of Rentals", 
+         color = "Bike Type",
+         title = "Daily Bike Type Preferences of Members") +
+    theme_minimal()
+
+# Plot for Casual users
+ggplot(casual_daily_bike_counts, aes(x = started_date, y = count, color = rideable_type)) +
+    geom_line() +
+    scale_color_manual(values = color_palette) +
+    labs(x = "Date", y = "Number of Rentals", 
+         color = "Bike Type",
+         title = "Daily Bike Type Preferences of Casual Users") +
+    theme_minimal()
+
+
+```
+
 
 \newpage
 # Appendix
