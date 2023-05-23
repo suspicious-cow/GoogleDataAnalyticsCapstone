@@ -67,17 +67,9 @@ combined_data_df$ride_length <-
 # Change the units attribute to "minutes"
 attr(combined_data_df$ride_length, "units") <- "minutes"
 
-# Get rid of outliers by only accepting ride times that are less than two days 
-# and greater than zero
-combined_data_df <- combined_data_df %>% filter(ride_length <= 2880 & 
-                                                    ride_length > 5) 
-
 
 # Add a new column for the date without the time
 combined_data_df$started_date <- as.Date(combined_data_df$started_at)
-
-
-
 
 
 # Create the 'day_of_week_start' and 'day_of_week_end' columns
@@ -89,6 +81,10 @@ combined_data_df$day_of_week_start <- as.factor(combined_data_df$day_of_week_sta
 combined_data_df$day_of_week_end <- as.factor(combined_data_df$day_of_week_end)
 
 
+# Get rid of outliers by only accepting ride times that are less than two days 
+# and greater than zero
+combined_data_df <- combined_data_df %>% filter(ride_length <= 2880 & 
+                                                    ride_length > 5) 
 
 
 # split our data into two groups: member and casual
@@ -156,3 +152,27 @@ ggplot(daily_counts_casual, aes(x = started_date, y = count)) +
           plot.subtitle = element_text(face = "italic", size = 12),
           axis.title = element_text(face = "bold", size = 14),
           axis.text = element_text(size = 12))
+
+
+# =======================================================================
+
+library(ggplot2)
+
+# Calculate the counts
+member_counts <- member_df %>% group_by(rideable_type) %>% summarise(count = n())
+casual_counts <- casual_df %>% group_by(rideable_type) %>% summarise(count = n())
+
+# Combine the data into one dataframe
+bike_pref_df <- rbind(
+    mutate(member_counts, user_type = "Member"),
+    mutate(casual_counts, user_type = "Casual")
+)
+
+# Plot
+ggplot(bike_pref_df, aes(x = rideable_type, y = count, fill = user_type)) +
+    geom_bar(stat = "identity", position = "dodge") +
+    geom_text(aes(label=count), vjust=-0.3, position = position_dodge(0.9)) +
+    labs(x = "Bike Type", y = "Count", fill = "User Type", title = "Bike Type Preference by User Type") +
+    theme_minimal()
+
+
