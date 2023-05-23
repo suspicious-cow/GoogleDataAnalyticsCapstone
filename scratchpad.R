@@ -25,19 +25,20 @@ if(file.exists("combined_data_df.rds")) {
     file_list <- list.files(path = "SourceData/", pattern = "*.csv", full.names = TRUE)
     
     # read and combine files
-    combined_data <- map_df(file_list, read_csv)
+    combined_data_df <- map_df(file_list, read_csv)
     
     # convert ridable_type and member_casual into factors
-    combined_data$rideable_type <- as.factor(combined_data$rideable_type)
-    combined_data$member_casual <- as.factor(combined_data$member_casual)
+    combined_data_df$rideable_type <- as.factor(combined_data_df$rideable_type)
+    combined_data_df$member_casual <- as.factor(combined_data_df$member_casual)
     
     # save the combined_data object so we don't have to reload this data again
     # unless it changes
-    write_rds(combined_data, "combined_data_df.rds")
+    write_rds(combined_data_df, "combined_data_df.rds")
 }
 
 
-
+rideable_unique_values <- levels(your_dataframe$member_casual)
+print(unique_values)
 
 
 

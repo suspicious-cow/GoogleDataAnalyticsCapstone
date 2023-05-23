@@ -381,11 +381,12 @@ display: none;
 <div id="TOC">
 <ul>
 <li><a href="#abstract" id="toc-abstract">Abstract</a></li>
+<li><a href="#ask" id="toc-ask">Ask</a></li>
+<li><a href="#prepare" id="toc-prepare">Prepare</a></li>
 <li><a href="#appendix" id="toc-appendix">Appendix</a>
 <ul>
 <li><a href="#references" id="toc-references">References</a></li>
-<li><a href="#all-source-code" id="toc-all-source-code">All Source
-Code</a></li>
+<li><a href="#source-code" id="toc-source-code">Source Code</a></li>
 </ul></li>
 </ul>
 </div>
@@ -403,33 +404,131 @@ effective marketing strategies for this conversion, the case study will
 delve into questions that probe how these two user groups use Cyclistic
 bikes differently, why casual riders might opt for annual memberships,
 and how digital media can facilitate this conversion.</p>
+<p>This study is divided into six stages: Ask, Prepare, Process,
+Analyze, Share, and Act. Each section will come with additional detail
+and build on the previous section. We hope you enjoy reading this
+analysis as much as we enjoyed making it.</p>
+</div>
+<div id="ask" class="section level1">
+<h1>Ask</h1>
+<p>The primary business question we aim to address is: How do annual
+members and casual riders use Cyclistic bikes differently? This question
+is fundamental to developing a marketing strategy that can effectively
+convert casual riders into annual members.</p>
+<p>To answer this question, we will delve into the following topics:</p>
+<ol style="list-style-type: decimal">
+<li><p><em>Duration and frequency of rides</em>: We will analyze data to
+understand the typical length and frequency of rides for both user
+groups. Are there noticeable differences between casual riders and
+annual members? Are members using the bikes more frequently or for
+longer duration?</p></li>
+<li><p><em>Purpose of rides</em>: We aim to determine the typical
+purpose of rides for both groups. Do casual riders primarily use the
+bikes for leisure, while members use them more for daily commuting? Or
+is there an overlap?</p></li>
+<li><p><em>Ride timings</em>: We’ll investigate if there’s a difference
+in the time of day, day of the week, or month of the year when the two
+user groups typically use the bikes.</p></li>
+<li><p><em>Bike preferences</em>: Given that Cyclistic offers various
+bike options, we will examine if there’s a pattern in the type of bike
+preferred by the two user groups.</p></li>
+</ol>
+<p>Answering these questions will provide insights into the riding
+patterns of the two groups, and will be instrumental in forming the
+foundation for a marketing strategy aimed at converting casual riders
+into annual members. The strategy will be developed in alignment with
+these insights, addressing the unique needs and behaviors of casual
+riders to motivate their transition to becoming annual members.</p>
+<p>Cyclistic’s collected data forms the backbone of this analysis. For
+transparency, we have included the source code in the paper’s Appendix.
+We strive to communicate our findings clearly, pairing concise language
+with comprehensible visualizations and straightforward
+recommendations.</p>
+</div>
+<div id="prepare" class="section level1">
+<h1>Prepare</h1>
+<p>The data for this analysis is publicly available and located on
+Divvy’s Amazon S3 storage. The data is titled as “Divvy Data.” <span class="citation">(Divvy 2023)</span></p>
+<p>The data is organized in an anonymized format, detailing each trip’s
+start and end day/time, start and end stations, and rider type (Member,
+Single Ride, and Day Pass). Trips taken by staff and any trips under 60
+seconds in length have been excluded from this dataset.</p>
+<p>Given the anonymization and rigorous data handling practices outlined
+by Divvy, we can consider the data to be Reliable, Original,
+Comprehensive, Current, and Cited (ROCCC). However, some level of bias
+could be inherent as the data only includes riders who choose to use
+Divvy’s services, and not all potential or actual cyclists in Chicago.
+Also, the credibility of the dataset is tied to Divvy’s data collection
+and handling processes.</p>
+<p>The data is provided according to the Divvy Data License Agreement.
+Accessibility is facilitated through public download links, ensuring the
+data can be freely used for analysis while respecting privacy through
+anonymization. Security of the data in our analysis will be ensured by
+following best practices, such as secure data storage and handling.</p>
+<p>Data integrity has been verified through initial exploratory data
+analysis to check for missing values, inconsistencies, or obvious
+outliers. Any issues found during this process will be documented and
+addressed appropriately.</p>
+<p>This dataset is instrumental in answering our primary business
+question — understanding how annual members and casual riders use
+Cyclistic bikes differently. Each trip’s information, coupled with the
+type of rider, will offer insights into the usage patterns of the two
+user groups.</p>
+<p>Potential problems with the data could include missing values,
+inconsistent data entries, or anomalies. These will be explored and
+addressed during the data cleaning and preprocessing stages of our
+analysis. If severe issues are encountered, they will be documented and
+taken into consideration when interpreting the analysis results.</p>
 <div style="page-break-after: always;"></div>
 </div>
 <div id="appendix" class="section level1">
 <h1>Appendix</h1>
 <div id="references" class="section level2">
 <h2>References</h2>
-<div id="refs">
-
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-DivvyData2023" class="csl-entry">
+Divvy. 2023. <span>“Divvy Data.”</span> <a href="https://divvy-tripdata.s3.amazonaws.com/index.html">https://divvy-tripdata.s3.amazonaws.com/index.html</a>.
 </div>
 </div>
-<div id="all-source-code" class="section level2">
-<h2>All Source Code</h2>
-<pre class="r"><code># set a seed in case we use any random values
+</div>
+<div id="source-code" class="section level2">
+<h2>Source Code</h2>
+<pre class="r"><code># set a seed in case we use any random numbers
 set.seed(1337)
 
-# Set the names of the packages and libraries you want to install
-required_libraries &lt;- c(&quot;ggplot2&quot;)
 
+# Set the names of the packages and libraries we want to install
+required_libraries &lt;- c(&quot;tidyverse&quot;, &quot;purrr&quot;, &quot;knitr&quot;)
 
 # Install missing packages and load all required libraries
-options(repos = c(CRAN = &quot;https://cran.r-project.org&quot;))
-
 for (lib in required_libraries) {
   if (!requireNamespace(lib, quietly = TRUE)) {
     install.packages(lib)
   }
   library(lib, character.only = TRUE)
+}
+
+# load all the cycling data for analysis
+# our data runs from 04/2022 to 04/2023
+if(file.exists(&quot;combined_data_df.rds&quot;)) {
+    # read in our combined data
+    combined_data_df &lt;- readRDS(&quot;combined_data_df.rds&quot;)
+    
+} else {
+    
+    # get file list
+    file_list &lt;- list.files(path = &quot;SourceData/&quot;, pattern = &quot;*.csv&quot;, full.names = TRUE)
+    
+    # read and combine files
+    combined_data_df &lt;- map_df(file_list, read_csv)
+    
+    # convert ridable_type and member_casual into factors
+    combined_data_df$rideable_type &lt;- as.factor(combined_data_df$rideable_type)
+    combined_data_df$member_casual &lt;- as.factor(combined_data_df$member_casual)
+    
+    # save the combined_data object so we don&#39;t have to reload this data again
+    # unless it changes
+    write_rds(combined_data_df, &quot;combined_data_df.rds&quot;)
 }</code></pre>
 </div>
 </div>
