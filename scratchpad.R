@@ -42,12 +42,18 @@ str(combined_data_df)
 # Check for missing values
 colSums(is.na(combined_data_df))
 
-# Print summary statistics of the dataframe
-summary(combined_data_df)
-
 # Print detailed summary statistics of the dataframe
 skim(combined_data_df)
 
+
+# Identify duplicates
+duplicates <- duplicated(combined_data_df)
+
+# Count duplicates
+num_duplicates <- sum(duplicates)
+
+# Show the number of duplicates
+print(num_duplicates)
 
 
 

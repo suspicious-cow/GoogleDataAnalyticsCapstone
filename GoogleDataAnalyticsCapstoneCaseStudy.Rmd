@@ -1,5 +1,5 @@
 ---
-title: "Title Here"
+title: "Case Study: How Does a Bike-Share Navigate Speedy Success?"
 author: "Zain Naboulsi"
 date: "2023-03-22"
 bibliography: references.bib
@@ -190,6 +190,26 @@ information can be used to analyze the temporal patterns of bike usage.
 
 * __Station information:__ The data includes detailed information about the start 
 and end stations, including their names and IDs.
+
+## Duplicate Observations
+Now we turn our attention to broad issues in the data if they exist. The first 
+task we will undertake is to check for duplicate rows in our data.  
+
+```{r, echo = TRUE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
+
+# Identify duplicates
+duplicates <- duplicated(combined_data_df)
+
+# Count duplicates
+num_duplicates <- sum(duplicates)
+
+# Show the number of duplicates
+print(num_duplicates)
+
+```  
+
+Fortunately, this dataset doesn't have any duplicate data. We can now move on to 
+other metrics.  
 
 ## Missing Values
 Our next task is to look for missing data (or NA data, as it is commonly 

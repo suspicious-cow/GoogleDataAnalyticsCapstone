@@ -385,11 +385,13 @@ display: none;
 <li><a href="#prepare" id="toc-prepare">Prepare</a>
 <ul>
 <li><a href="#structure-of-the-data" id="toc-structure-of-the-data">Structure of the Data</a></li>
+<li><a href="#duplicate-observations" id="toc-duplicate-observations">Duplicate Observations</a></li>
 <li><a href="#missing-values" id="toc-missing-values">Missing
 Values</a></li>
 <li><a href="#summary-statistics" id="toc-summary-statistics">Summary
 Statistics</a></li>
 </ul></li>
+<li><a href="#process" id="toc-process">Process</a></li>
 <li><a href="#appendix" id="toc-appendix">Appendix</a>
 <ul>
 <li><a href="#references" id="toc-references">References</a></li>
@@ -551,6 +553,23 @@ temporal patterns of bike usage.</p></li>
 information about the start and end stations, including their names and
 IDs.</p></li>
 </ul>
+</div>
+<div id="duplicate-observations" class="section level2">
+<h2>Duplicate Observations</h2>
+<p>Now we turn our attention to broad issues in the data if they exist.
+The first task we will undertake is to check for duplicate rows in our
+data.</p>
+<pre class="r"><code># Identify duplicates
+duplicates &lt;- duplicated(combined_data_df)
+
+# Count duplicates
+num_duplicates &lt;- sum(duplicates)
+
+# Show the number of duplicates
+print(num_duplicates)</code></pre>
+<pre><code>## [1] 0</code></pre>
+<p>Fortunately, this dataset doesn’t have any duplicate data. We can now
+move on to other metrics.</p>
 </div>
 <div id="missing-values" class="section level2">
 <h2>Missing Values</h2>
@@ -925,8 +944,11 @@ occur in a relatively confined geographical area.</p></li>
 indicate that the data spans from 1st April 2022 to 30th April 2023, so
 just over a year’s worth of ride data.</p></li>
 </ul>
-<div style="page-break-after: always;"></div>
 </div>
+</div>
+<div id="process" class="section level1">
+<h1>Process</h1>
+<div style="page-break-after: always;"></div>
 </div>
 <div id="appendix" class="section level1">
 <h1>Appendix</h1>
@@ -990,6 +1012,16 @@ if(file.exists(&quot;combined_data_df.rds&quot;)) {
 
 # examine the structure of the data
 str(combined_data_df)
+
+
+# Identify duplicates
+duplicates &lt;- duplicated(combined_data_df)
+
+# Count duplicates
+num_duplicates &lt;- sum(duplicates)
+
+# Show the number of duplicates
+print(num_duplicates)
 
 
 # Check for missing values
