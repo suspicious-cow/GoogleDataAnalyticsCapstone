@@ -290,6 +290,42 @@ data.
 
 
 # Process
+Turning our attention to processing the data, we can review what decisions we 
+have made thus far and augment the data as needed to facilitate the analysis 
+process coming up. 
+
+## Key Decisions
+Here are the decisions made so far:
+* __Tools chosen__ include R programming language along with the `tidyverse`, `purrr`, 
+`knitr`, `skimr`, and `readr` libraries. The reason for choosing these tools is 
+their strength in data manipulation, visualization, and analysis. `tidyverse` 
+includes several useful packages for data cleaning and analysis, while `purrr` 
+enhances R's functional programming capabilities. `knitr` provides dynamic 
+report generation, and `skimr` and `readr` are helpful for data summarization 
+and importing.
+
+* __Data's integrity__ is ensured through multiple steps: Firstly, by loading 
+the dataset directly from a local ".rds" file if it exists to avoid data 
+corruption that could occur during multiple read operations. If the ".rds" file 
+does not exist, CSV files are read directly from the source directory, ensuring 
+the original data's integrity.
+
+* __Data cleaning__ steps taken involve checking for missing values and 
+duplicated records. The number of missing values in each column is found using 
+`colSums(is.na(combined_data_df))`, and duplicated records are found using 
+`duplicated(combined_data_df)`.
+
+* __Data verification__ for readiness for analysis is done by summarizing the 
+dataframe using `skim(combined_data_df)` which provides detailed summary 
+statistics. This summary provides a good understanding of the data's 
+distribution and potential issues (like extreme outliers).
+
+* __The cleaning process__ is documented in this markdown document. It includes 
+checking for missing values, identifying duplicates, and getting summary 
+statistics. This document serves as a record of the cleaning process and can be 
+shared or reviewed at a later date.
+
+## Additional Data Changes
 
 
 \newpage
