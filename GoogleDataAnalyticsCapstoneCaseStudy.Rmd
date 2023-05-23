@@ -20,6 +20,47 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
+# set a seed in case we use any random numbers
+set.seed(1337)
+
+
+# Set the names of the packages and libraries we want to install
+required_libraries <- c("tidyverse", "purrr", "knitr")
+
+# Install missing packages and load all required libraries
+for (lib in required_libraries) {
+  if (!requireNamespace(lib, quietly = TRUE)) {
+    install.packages(lib)
+  }
+  library(lib, character.only = TRUE)
+}
+
+# load all the cycling data for analysis
+# our data runs from 04/2022 to 04/2023
+if(file.exists("combined_data_df.rds")) {
+    # read in our combined data
+    combined_data_df <- readRDS("combined_data_df.rds")
+    
+} else {
+    
+    # get file list
+    file_list <- list.files(path = "SourceData/", pattern = "*.csv", full.names = TRUE)
+    
+    # read and combine files
+    combined_data_df <- map_df(file_list, read_csv)
+    
+    # convert ridable_type and member_casual into factors
+    combined_data_df$rideable_type <- as.factor(combined_data_df$rideable_type)
+    combined_data_df$member_casual <- as.factor(combined_data_df$member_casual)
+    
+    # save the combined_data object so we don't have to reload this data again
+    # unless it changes
+    write_rds(combined_data_df, "combined_data_df.rds")
+}
+
+```
+
 # Abstract
 Cyclistic, a popular bike-share company based in Chicago, strives to maximize 
 its annual memberships for sustainable growth. The company has an existing user 
@@ -35,7 +76,7 @@ and how digital media can facilitate this conversion.
 This study is divided into six stages: Ask, Prepare, Process, Analyze, Share, 
 and Act. Each section will come with additional detail and build on the previous 
 section. We hope you enjoy reading this analysis as much as we enjoyed making
-it. 
+it. All work was done with the R Language [@rbase] in R Studio [@rstudio].
 
 
 # Ask
@@ -46,20 +87,20 @@ annual members.
 
 To answer this question, we will delve into the following topics:
 
-1. *Duration and frequency of rides*: We will analyze data to understand the 
+1. *Duration and frequency of rides:* We will analyze data to understand the 
 typical length and frequency of rides for both user groups. Are there noticeable 
 differences between casual riders and annual members? Are members using the 
 bikes more frequently or for longer duration?
 
-2. *Purpose of rides*: We aim to determine the typical purpose of rides for both 
+2. *Purpose of rides:* We aim to determine the typical purpose of rides for both 
 groups. Do casual riders primarily use the bikes for leisure, while members use 
 them more for daily commuting? Or is there an overlap?
 
-3. *Ride timings*: We'll investigate if there's a difference in the time of day, 
+3. *Ride timings:* We'll investigate if there's a difference in the time of day, 
 day of the week, or month of the year when the two user groups typically use the 
 bikes.
 
-4. *Bike preferences*: Given that Cyclistic offers various bike options, we will 
+4. *Bike preferences:* Given that Cyclistic offers various bike options, we will 
 examine if there's a pattern in the type of bike preferred by the two user 
 groups.
 
@@ -113,44 +154,46 @@ cleaning and preprocessing stages of our analysis. If severe issues are
 encountered, they will be documented and taken into consideration when 
 interpreting the analysis results.
 
+## Structure of the Data
+We used the str() function in R to give us a detailed structure of the data.  
+
+```{r, echo = TRUE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
+
+# examine the structure of the data
+str(combined_data_df)
+
+```
+
+Here are some interesting observations from the output:  
+
+* __Data size:__ The dataframe contains over 6.23 million records, spread across 13 
+variables.  
+
+* __Data types:__ The variables in the dataframe are of various types, including 
+character (e.g., ride_id, start_station_name, start_station_id, etc.), 
+factor (e.g., rideable_type, member_casual), numeric (e.g., start_lat, 
+start_lng, end_lat, end_lng), and POSIXct (e.g., started_at, ended_at). This 
+variety indicates that the dataset is rich and contains different kinds of 
+information.  
+
+* __Rideable types:__ There are three levels of rideable_type: classic_bike, 
+docked_bike, and electric_bike.  
+
+* __Member categories:__ There are two levels of member_casual: casual and member.  
+
+* __Geographic coordinates:__ The data contains latitude and longitude information 
+for both the start and end locations of rides. This information could be used to 
+plot geographic routes or to analyze usage patterns across different locations.  
+
+* __Time information:__ The dataset includes when each ride started and ended. This 
+information can be used to analyze the temporal patterns of bike usage.
+
+* __Station information:__ The data includes detailed information about the start 
+and end stations, including their names and IDs.
+
 ```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
-# set a seed in case we use any random numbers
-set.seed(1337)
 
 
-# Set the names of the packages and libraries we want to install
-required_libraries <- c("tidyverse", "purrr", "knitr")
-
-# Install missing packages and load all required libraries
-for (lib in required_libraries) {
-  if (!requireNamespace(lib, quietly = TRUE)) {
-    install.packages(lib)
-  }
-  library(lib, character.only = TRUE)
-}
-
-# load all the cycling data for analysis
-# our data runs from 04/2022 to 04/2023
-if(file.exists("combined_data_df.rds")) {
-    # read in our combined data
-    combined_data_df <- readRDS("combined_data_df.rds")
-    
-} else {
-    
-    # get file list
-    file_list <- list.files(path = "SourceData/", pattern = "*.csv", full.names = TRUE)
-    
-    # read and combine files
-    combined_data_df <- map_df(file_list, read_csv)
-    
-    # convert ridable_type and member_casual into factors
-    combined_data_df$rideable_type <- as.factor(combined_data_df$rideable_type)
-    combined_data_df$member_casual <- as.factor(combined_data_df$member_casual)
-    
-    # save the combined_data object so we don't have to reload this data again
-    # unless it changes
-    write_rds(combined_data_df, "combined_data_df.rds")
-}
 
 ```
 

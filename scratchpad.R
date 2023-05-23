@@ -3,7 +3,7 @@ set.seed(1337)
 
 
 # Set the names of the packages and libraries you want to install
-required_libraries <- c("tidyverse", "purrr", "knitr", "skimr")
+required_libraries <- c("tidyverse", "purrr", "knitr", "skimr", "readr")
 
 # Install missing packages and load all required libraries
 for (lib in required_libraries) {
@@ -36,12 +36,20 @@ if(file.exists("combined_data_df.rds") && !exists("combined_data_df")) {
     write_rds(combined_data_df, "combined_data_df.rds")
 }
 
+# examine the structure of the data
+str(combined_data_df)
 
-member_casual_unique_values <- levels(combined_data_df$member_casual)
-print(member_casual_unique_values)
+# Now you can inspect problems
+readr::problems(combined_data_df)
 
-rideable_unique_values <- levels(combined_data_df$rideable_type)
-print(rideable_unique_values)
+# Print summary statistics of the dataframe
+summary(combined_data_df)
+
+# Print detailed summary statistics of the dataframe
+skim(combined_data_df)
+
+# Check for missing values
+colSums(is.na(combined_data_df))
 
 
 
