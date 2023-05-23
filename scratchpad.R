@@ -122,22 +122,33 @@ print(ride_length_metrics)
 
 
 
-# Group by date and count the number of rides each day
-daily_counts <- combined_data_df %>% group_by(started_date) %>% summarise(count = n())
+# Group by date and count the number of rides each day per group
+daily_counts_member <- member_df %>% group_by(started_date) %>% summarise(count = n())
+daily_counts_casual <- casual_df %>% group_by(started_date) %>% summarise(count = n())
 
-# Create the line graph
-ggplot(daily_counts, aes(x=started_date, y=count)) +
-    geom_line() +
-    labs(x = "Date", y = "Number of Rentals", title = "Daily Bike Rentals") +
-    theme_minimal()
 
-# super line plot
-ggplot(daily_counts, aes(x = started_date, y = count)) +
+# super line graph for members
+ggplot(daily_counts_member, aes(x = started_date, y = count)) +
     geom_line(color = "darkblue") +
     geom_smooth(method = "loess", se = FALSE, color = "red", linetype="dashed") +
     labs(x = "Date", 
          y = "Number of Rentals", 
-         title = "Daily Bike Rentals", 
+         title = "Daily Bike Rentals for Members", 
+         subtitle = "With trend line",
+         caption = "Source: https://divvybikes.com/system-data") +
+    theme_minimal() +
+    theme(plot.title = element_text(face = "bold", size = 20),
+          plot.subtitle = element_text(face = "italic", size = 12),
+          axis.title = element_text(face = "bold", size = 14),
+          axis.text = element_text(size = 12))
+
+# super line graph for casual
+ggplot(daily_counts_casual, aes(x = started_date, y = count)) +
+    geom_line(color = "darkblue") +
+    geom_smooth(method = "loess", se = FALSE, color = "red", linetype="dashed") +
+    labs(x = "Date", 
+         y = "Number of Rentals", 
+         title = "Daily Bike Rentals for Casual", 
          subtitle = "With trend line",
          caption = "Source: https://divvybikes.com/system-data") +
     theme_minimal() +

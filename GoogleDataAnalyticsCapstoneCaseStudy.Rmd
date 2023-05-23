@@ -89,18 +89,14 @@ To answer this question, we will delve into the following topics:
 
 1. *Duration and frequency of rides:* We will analyze data to understand the 
 typical length of rides for both user groups. Are there noticeable 
-differences between casual riders and annual members? Are members using the 
-bikes more frequently or for longer duration?
+differences between casual riders and members? Are members using the bikes more 
+frequently or for longer duration?
 
-2. *Purpose of rides:* We aim to determine the typical purpose of rides for both 
-groups. Do casual riders primarily use the bikes for leisure, while members use 
-them more for daily commuting? Or is there an overlap?
-
-3. *Ride timings:* We'll investigate if there's a difference in the time of day, 
+2. *Ride timings:* We'll investigate if there's a difference in the time of day, 
 day of the week, or month of the year when the two user groups typically use the 
 bikes.
 
-4. *Bike preferences:* Given that Cyclistic offers various bike options, we will 
+3. *Bike preferences:* Given that Cyclistic offers various bike options, we will 
 examine if there's a pattern in the type of bike preferred by the two user 
 groups.
 
@@ -434,31 +430,53 @@ shows the daily bike rentals from April 2022 to April 2023 for members.
 
 ```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
 
-# Group by date and count the number of rides each day
-daily_counts <- combined_data_df %>% group_by(started_date) %>% summarise(count = n())
+# Group by date and count the number of rides each day per group
+daily_counts_member <- member_df %>% group_by(started_date) %>% summarise(count = n())
+daily_counts_casual <- casual_df %>% group_by(started_date) %>% summarise(count = n())
 
-# Line graph for the year with trendline
-ggplot(daily_counts, aes(x = started_date, y = count)) +
-  geom_line(color = "darkblue") +
-  geom_smooth(method = "loess", se = FALSE, color = "red", linetype="dashed") +
-  labs(x = "Date", 
-       y = "Number of Rentals", 
-       title = "Daily Bike Rentals", 
-       subtitle = "With trend line",
-       caption = "Source: https://divvybikes.com/system-data") +
-  theme_minimal() +
-  theme(plot.title = element_text(face = "bold", size = 20),
-        plot.subtitle = element_text(face = "italic", size = 12),
-        axis.title = element_text(face = "bold", size = 14),
-        axis.text = element_text(size = 12))
+
+# super line graph for members
+ggplot(daily_counts_member, aes(x = started_date, y = count)) +
+    geom_line(color = "darkblue") +
+    geom_smooth(method = "loess", se = FALSE, color = "red", linetype="dashed") +
+    labs(x = "Date", 
+         y = "Number of Rentals", 
+         title = "Daily Bike Rentals for Members", 
+         subtitle = "With trend line",
+         caption = "Source: https://divvybikes.com/system-data") +
+    theme_minimal() +
+    theme(plot.title = element_text(face = "bold", size = 20),
+          plot.subtitle = element_text(face = "italic", size = 12),
+          axis.title = element_text(face = "bold", size = 14),
+          axis.text = element_text(size = 12))
+
+# super line graph for casual
+ggplot(daily_counts_casual, aes(x = started_date, y = count)) +
+    geom_line(color = "darkblue") +
+    geom_smooth(method = "loess", se = FALSE, color = "red", linetype="dashed") +
+    labs(x = "Date", 
+         y = "Number of Rentals", 
+         title = "Daily Bike Rentals for Casual", 
+         subtitle = "With trend line",
+         caption = "Source: https://divvybikes.com/system-data") +
+    theme_minimal() +
+    theme(plot.title = element_text(face = "bold", size = 20),
+          plot.subtitle = element_text(face = "italic", size = 12),
+          axis.title = element_text(face = "bold", size = 14),
+          axis.text = element_text(size = 12))
 
 
 
 ```
 
-As we can see, there is a definitive seasonal trend to bike rentals. During the 
-warmer months there are more rentals and, as the weather grows colder, the 
-rentals decline until about the April time frame when they trend up again. 
+As we can see, there is a definitive seasonal trend to bike rentals overall and 
+particularly between the two groups. Most notably, the member rentals decline in 
+the winter months but almost never "bottom out". Whereas, the casual rentals go 
+very flat in the winter months but make up for it in volume during the warmer 
+times. If we are looking to convert casual riders to members, an incentive that 
+can be used during the warmer months should be considered. 
+
+
 
 \newpage
 # Appendix
