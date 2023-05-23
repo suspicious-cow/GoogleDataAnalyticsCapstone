@@ -88,7 +88,7 @@ annual members.
 To answer this question, we will delve into the following topics:
 
 1. *Duration and frequency of rides:* We will analyze data to understand the 
-typical length and frequency of rides for both user groups. Are there noticeable 
+typical length of rides for both user groups. Are there noticeable 
 differences between casual riders and annual members? Are members using the 
 bikes more frequently or for longer duration?
 
@@ -344,6 +344,7 @@ rental trends over time by day.
 Tuesday, etc...) a trip happened easier. This is converted to a factor for more 
 advanced activities.  
 
+
 ```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
 
 # calculate the total ride time in minutes
@@ -390,27 +391,46 @@ combined_data_df <- combined_data_df %>% filter(ride_length <= 2880 & ride_lengt
 To get started, we wanted to present some basic metrics on ride length:  
 
 ```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
-# ride_length metrics
-ride_length_mean <- mean(as.numeric(combined_data_df$ride_length))
-ride_length_max <- max(as.numeric(combined_data_df$ride_length))
-ride_length_min <- min(as.numeric(combined_data_df$ride_length))
 
-cat("The average rental time was", round(ride_length_mean, 2), 
-    "minutes long.\n The longest rental time was", ride_length_max,"minutes\n",
-    "and the shortest rental time was", ride_length_min, "minutes.")
+# split our data into two groups: member and casual
+member_df <- combined_data_df %>% filter(member_casual == "member") 
+casual_df <- combined_data_df %>% filter(member_casual == "casual") 
+
+# ride_length metrics for both groups
+ride_length_mean_member <- mean(as.numeric(member_df$ride_length))
+ride_length_max_member <- max(as.numeric(member_df$ride_length))
+ride_length_min_member <- min(as.numeric(member_df$ride_length))
+
+ride_length_mean_casual <- mean(as.numeric(casual_df$ride_length))
+ride_length_max_casual <- max(as.numeric(casual_df$ride_length))
+ride_length_min_casual <- min(as.numeric(casual_df$ride_length))
+
+# Create a data frame
+ride_length_metrics <- data.frame(
+    Metric = c("Mean", "Max", "Min"),
+    Member = round(c(ride_length_mean_member, ride_length_max_member, ride_length_min_member), 2),
+    Casual = round(c(ride_length_mean_casual, ride_length_max_casual, ride_length_min_casual), 2)
+)
+
+# Print the data frame
+print(ride_length_metrics)
 
 
 ```
 
-As we can see, the average rental is about seventeen minutes but the range of 
-rental times varies widely from a few seconds to two days. Because we removed 
-outliers we may have removed legitimate rentals over two days; however they 
-would be anomalies and not indicative of the overall data. 
+Overall, it appears that casual customers rent bikes for longer periods of time 
+compared to members. This information can be valuable for our strategic 
+planning. For instance, it might be worth exploring if there are ways to 
+encourage casual customers to become members, given their high usage. It's also 
+important to explore the reasons behind the high maximum ride lengths, 
+particularly for casual customers, as this might point to potential misuse or 
+misunderstanding of rental policies.
+
 
 ## Daily Bike Rentals
-It is important to take a step back and look at the entire year of data we have 
-to get some perspective on rental trends. The graph below shows the daily bike 
-rentals from April 2022 to April 2023. 
+Now let's take a step back and look at the entire year of data we have 
+to get some perspective on rental trends between the two groups. The graph below 
+shows the daily bike rentals from April 2022 to April 2023 for members. 
 
 ```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
 
@@ -425,7 +445,7 @@ ggplot(daily_counts, aes(x = started_date, y = count)) +
        y = "Number of Rentals", 
        title = "Daily Bike Rentals", 
        subtitle = "With trend line",
-       caption = "Source: Your Data Source") +
+       caption = "Source: https://divvybikes.com/system-data") +
   theme_minimal() +
   theme(plot.title = element_text(face = "bold", size = 20),
         plot.subtitle = element_text(face = "italic", size = 12),
@@ -436,6 +456,9 @@ ggplot(daily_counts, aes(x = started_date, y = count)) +
 
 ```
 
+As we can see, there is a definitive seasonal trend to bike rentals. During the 
+warmer months there are more rentals and, as the weather grows colder, the 
+rentals decline until about the April time frame when they trend up again. 
 
 \newpage
 # Appendix
