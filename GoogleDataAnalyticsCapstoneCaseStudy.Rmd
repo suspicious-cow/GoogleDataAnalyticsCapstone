@@ -320,12 +320,57 @@ dataframe using `skim(combined_data_df)` which provides detailed summary
 statistics. This summary provides a good understanding of the data's 
 distribution and potential issues (like extreme outliers).
 
-* __The cleaning process__ is documented in this markdown document. It includes 
+* __Cleaning processes__ are documented in this markdown document. Including, 
 checking for missing values, identifying duplicates, and getting summary 
 statistics. This document serves as a record of the cleaning process and can be 
-shared or reviewed at a later date.
+shared or reviewed as needed.
 
-## Additional Data Changes
+## Additional Data Changes  
+Beyond the standard processing steps to get the data ready for analysis, we 
+decided to make a couple of modifications to the dataframe to support additional 
+queries we anticipate. The changes are as follows:  
+
+* __Calculate Trip Time:__ The `ride_length` variable was added. This column is a 
+derived by subtracting `ended_at` from `started_from`. The results are in total 
+minutes elapsed for the ride.  
+
+* __Day of Week:__ A two new columns entitled `day_of_week_start` and 
+`day_of_week_end` were added to make analysis of the specific day (e.g. Monday, 
+Tuesday, etc...) a trip happened easier. This is converted to a factor for more 
+advanced activities.  
+
+```{r, echo = TRUE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
+
+# calculate the total ride time in minutes
+combined_data_df$ride_length <- 
+    round((combined_data_df$ended_at - combined_data_df$started_at) / 60, 2)
+
+# Change the units attribute to "minutes"
+attr(combined_data_df$ride_length, "units") <- "minutes"
+
+
+# Create the 'day_of_week_start' and 'day_of_week_end' columns
+combined_data_df$day_of_week_start <- wday(combined_data_df$started_at, label = TRUE)
+combined_data_df$day_of_week_end <- wday(combined_data_df$ended_at, label = TRUE)
+
+# Convert the new columns to factors
+combined_data_df$day_of_week_start <- as.factor(combined_data_df$day_of_week_start)
+combined_data_df$day_of_week_end <- as.factor(combined_data_df$day_of_week_end)
+
+
+```
+
+
+# Analyze
+Our analysis will traverse the entirety of the dataset. To get started, we 
+wanted to present some key metrics:
+
+```{r, echo = TRUE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
+
+
+
+```
+
 
 
 \newpage

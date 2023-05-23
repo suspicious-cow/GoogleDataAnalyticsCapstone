@@ -13,7 +13,7 @@
 
 <meta name="date" content="2023-03-22" />
 
-<title>Title Here</title>
+<title>Case Study: How Does a Bike-Share Navigate Speedy Success?</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -372,7 +372,8 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Title Here</h1>
+<h1 class="title toc-ignore">Case Study: How Does a Bike-Share Navigate
+Speedy Success?</h1>
 <h4 class="author">Zain Naboulsi</h4>
 <h4 class="date">2023-03-22</h4>
 
@@ -391,7 +392,13 @@ Values</a></li>
 <li><a href="#summary-statistics" id="toc-summary-statistics">Summary
 Statistics</a></li>
 </ul></li>
-<li><a href="#process" id="toc-process">Process</a></li>
+<li><a href="#process" id="toc-process">Process</a>
+<ul>
+<li><a href="#key-decisions" id="toc-key-decisions">Key
+Decisions</a></li>
+<li><a href="#additional-data-changes" id="toc-additional-data-changes">Additional Data Changes</a></li>
+</ul></li>
+<li><a href="#analyze" id="toc-analyze">Analyze</a></li>
 <li><a href="#appendix" id="toc-appendix">Appendix</a>
 <ul>
 <li><a href="#references" id="toc-references">References</a></li>
@@ -948,6 +955,81 @@ just over a year’s worth of ride data.</p></li>
 </div>
 <div id="process" class="section level1">
 <h1>Process</h1>
+<p>Turning our attention to processing the data, we can review what
+decisions we have made thus far and augment the data as needed to
+facilitate the analysis process coming up.</p>
+<div id="key-decisions" class="section level2">
+<h2>Key Decisions</h2>
+<p>Here are the decisions made so far: * <strong>Tools chosen</strong>
+include R programming language along with the <code>tidyverse</code>,
+<code>purrr</code>, <code>knitr</code>, <code>skimr</code>, and
+<code>readr</code> libraries. The reason for choosing these tools is
+their strength in data manipulation, visualization, and analysis.
+<code>tidyverse</code> includes several useful packages for data
+cleaning and analysis, while <code>purrr</code> enhances R’s functional
+programming capabilities. <code>knitr</code> provides dynamic report
+generation, and <code>skimr</code> and <code>readr</code> are helpful
+for data summarization and importing.</p>
+<ul>
+<li><p><strong>Data’s integrity</strong> is ensured through multiple
+steps: Firstly, by loading the dataset directly from a local “.rds” file
+if it exists to avoid data corruption that could occur during multiple
+read operations. If the “.rds” file does not exist, CSV files are read
+directly from the source directory, ensuring the original data’s
+integrity.</p></li>
+<li><p><strong>Data cleaning</strong> steps taken involve checking for
+missing values and duplicated records. The number of missing values in
+each column is found using
+<code>colSums(is.na(combined_data_df))</code>, and duplicated records
+are found using <code>duplicated(combined_data_df)</code>.</p></li>
+<li><p><strong>Data verification</strong> for readiness for analysis is
+done by summarizing the dataframe using
+<code>skim(combined_data_df)</code> which provides detailed summary
+statistics. This summary provides a good understanding of the data’s
+distribution and potential issues (like extreme outliers).</p></li>
+<li><p><strong>Cleaning processes</strong> are documented in this
+markdown document. Including, checking for missing values, identifying
+duplicates, and getting summary statistics. This document serves as a
+record of the cleaning process and can be shared or reviewed as
+needed.</p></li>
+</ul>
+</div>
+<div id="additional-data-changes" class="section level2">
+<h2>Additional Data Changes</h2>
+<p>Beyond the standard processing steps to get the data ready for
+analysis, we decided to make a couple of modifications to the dataframe
+to support additional queries we anticipate. The changes are as
+follows:</p>
+<ul>
+<li><p><strong>Calculate Trip Time:</strong> The
+<code>ride_length</code> variable was added. This column is a derived by
+subtracting <code>ended_at</code> from <code>started_from</code>. The
+results are in total minutes elapsed for the ride.</p></li>
+<li><p><strong>Day of Week:</strong> A two new columns entitled
+<code>day_of_week_start</code> and <code>day_of_week_end</code> were
+added to make analysis of the specific day (e.g. Monday, Tuesday, etc…)
+a trip happened easier. This is converted to a factor for more advanced
+activities.</p></li>
+</ul>
+<pre class="r"><code># calculate the total ride time in minutes
+combined_data_df$ride_length &lt;- 
+    round((combined_data_df$ended_at - combined_data_df$started_at) / 60, 2)
+
+# Change the units attribute to &quot;minutes&quot;
+attr(combined_data_df$ride_length, &quot;units&quot;) &lt;- &quot;minutes&quot;
+
+
+# Create the &#39;day_of_week_start&#39; and &#39;day_of_week_end&#39; columns
+combined_data_df$day_of_week_start &lt;- wday(combined_data_df$started_at, label = TRUE)
+combined_data_df$day_of_week_end &lt;- wday(combined_data_df$ended_at, label = TRUE)
+
+# Convert the new columns to factors
+combined_data_df$day_of_week_start &lt;- as.factor(combined_data_df$day_of_week_start)
+combined_data_df$day_of_week_end &lt;- as.factor(combined_data_df$day_of_week_end)</code></pre>
+</div>
+</div>
+<div id="analyze" class="section level1">
+<h1>Analyze</h1>
 <div style="page-break-after: always;"></div>
 </div>
 <div id="appendix" class="section level1">
@@ -1029,7 +1111,24 @@ colSums(is.na(combined_data_df))
 
 
 # Print detailed summary statistics of the dataframe
-skim(combined_data_df)</code></pre>
+skim(combined_data_df)
+
+
+# calculate the total ride time in minutes
+combined_data_df$ride_length &lt;- 
+    round((combined_data_df$ended_at - combined_data_df$started_at) / 60, 2)
+
+# Change the units attribute to &quot;minutes&quot;
+attr(combined_data_df$ride_length, &quot;units&quot;) &lt;- &quot;minutes&quot;
+
+
+# Create the &#39;day_of_week_start&#39; and &#39;day_of_week_end&#39; columns
+combined_data_df$day_of_week_start &lt;- wday(combined_data_df$started_at, label = TRUE)
+combined_data_df$day_of_week_end &lt;- wday(combined_data_df$ended_at, label = TRUE)
+
+# Convert the new columns to factors
+combined_data_df$day_of_week_start &lt;- as.factor(combined_data_df$day_of_week_start)
+combined_data_df$day_of_week_end &lt;- as.factor(combined_data_df$day_of_week_end)</code></pre>
 </div>
 </div>
 

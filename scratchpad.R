@@ -57,7 +57,18 @@ print(num_duplicates)
 
 
 
+# calculate the total ride time in minutes
+combined_data_df$ride_length <- 
+    round((combined_data_df$ended_at - combined_data_df$started_at) / 60, 2)
+
+# Change the units attribute to "minutes"
+attr(combined_data_df$ride_length, "units") <- "minutes"
 
 
+# Create the 'day_of_week_start' and 'day_of_week_end' columns
+combined_data_df$day_of_week_start <- wday(combined_data_df$started_at, label = TRUE)
+combined_data_df$day_of_week_end <- wday(combined_data_df$ended_at, label = TRUE)
 
-
+# Convert the new columns to factors
+combined_data_df$day_of_week_start <- as.factor(combined_data_df$day_of_week_start)
+combined_data_df$day_of_week_end <- as.factor(combined_data_df$day_of_week_end)
