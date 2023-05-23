@@ -385,6 +385,8 @@ display: none;
 <li><a href="#prepare" id="toc-prepare">Prepare</a>
 <ul>
 <li><a href="#structure-of-the-data" id="toc-structure-of-the-data">Structure of the Data</a></li>
+<li><a href="#missing-values" id="toc-missing-values">Missing
+Values</a></li>
 </ul></li>
 <li><a href="#appendix" id="toc-appendix">Appendix</a>
 <ul>
@@ -422,19 +424,19 @@ is fundamental to developing a marketing strategy that can effectively
 convert casual riders into annual members.</p>
 <p>To answer this question, we will delve into the following topics:</p>
 <ol style="list-style-type: decimal">
-<li><p><em>Duration and frequency of rides</em>: We will analyze data to
+<li><p><em>Duration and frequency of rides:</em> We will analyze data to
 understand the typical length and frequency of rides for both user
 groups. Are there noticeable differences between casual riders and
 annual members? Are members using the bikes more frequently or for
 longer duration?</p></li>
-<li><p><em>Purpose of rides</em>: We aim to determine the typical
+<li><p><em>Purpose of rides:</em> We aim to determine the typical
 purpose of rides for both groups. Do casual riders primarily use the
 bikes for leisure, while members use them more for daily commuting? Or
 is there an overlap?</p></li>
-<li><p><em>Ride timings</em>: We’ll investigate if there’s a difference
+<li><p><em>Ride timings:</em> We’ll investigate if there’s a difference
 in the time of day, day of the week, or month of the year when the two
 user groups typically use the bikes.</p></li>
-<li><p><em>Bike preferences</em>: Given that Cyclistic offers various
+<li><p><em>Bike preferences:</em> Given that Cyclistic offers various
 bike options, we will examine if there’s a pattern in the type of bike
 preferred by the two user groups.</p></li>
 </ol>
@@ -547,6 +549,49 @@ temporal patterns of bike usage.</p></li>
 information about the start and end stations, including their names and
 IDs.</p></li>
 </ul>
+</div>
+<div id="missing-values" class="section level2">
+<h2>Missing Values</h2>
+<p>Our next task is to look for missing data (or NA data, as it is
+commonly called). Here is what we found:</p>
+<pre class="r"><code># Check for missing values
+colSums(is.na(combined_data_df))</code></pre>
+<pre><code>##            ride_id      rideable_type         started_at           ended_at 
+##                  0                  0                  0                  0 
+## start_station_name   start_station_id   end_station_name     end_station_id 
+##             902896             903028             964949             965090 
+##          start_lat          start_lng            end_lat            end_lng 
+##                  0                  0               6290               6290 
+##      member_casual 
+##                  0</code></pre>
+<p>From this output, we can see that there are missing values (NA) in
+some of the columns.</p>
+<ul>
+<li>The <code>start_station_name</code> column has 902,896 missing
+values.</li>
+<li>The <code>start_station_id</code> column has 903,028 missing
+values.</li>
+<li>The <code>end_station_name</code> column has 964,949 missing
+values.</li>
+<li>The <code>end_station_id</code> column has 965,090 missing
+values.</li>
+<li>The <code>end_lat</code> and <code>end_lng</code> columns each have
+6,290 missing values.</li>
+</ul>
+<p>The other columns (<code>ride_id</code>, <code>rideable_type</code>,
+<code>started_at</code>, <code>ended_at</code>, <code>start_lat</code>,
+<code>start_lng</code>, and <code>member_casual</code>) do not have any
+missing values.</p>
+<p>Missing data can be problematic because it may skew the results of
+our analysis or cause certain functions to fail. You will want to
+investigate why there are missing values in the data and consider ways
+of handling it, such as filling them in with an average or other
+statistic (imputation), or removing rows.</p>
+<p>The differences in the number of missing values between the
+<code>start</code> and <code>end</code> station names and IDs could
+indicate inconsistencies in data collection or recording. This may
+require further investigation to ensure that any analyses we conduct on
+this data are valid and reliable.</p>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -611,7 +656,11 @@ if(file.exists(&quot;combined_data_df.rds&quot;)) {
 
 
 # examine the structure of the data
-str(combined_data_df)</code></pre>
+str(combined_data_df)
+
+
+# Check for missing values
+colSums(is.na(combined_data_df))</code></pre>
 </div>
 </div>
 

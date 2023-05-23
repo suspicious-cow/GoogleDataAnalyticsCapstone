@@ -39,8 +39,8 @@ if(file.exists("combined_data_df.rds") && !exists("combined_data_df")) {
 # examine the structure of the data
 str(combined_data_df)
 
-# Now you can inspect problems
-readr::problems(combined_data_df)
+# Check for missing values
+colSums(is.na(combined_data_df))
 
 # Print summary statistics of the dataframe
 summary(combined_data_df)
@@ -48,8 +48,7 @@ summary(combined_data_df)
 # Print detailed summary statistics of the dataframe
 skim(combined_data_df)
 
-# Check for missing values
-colSums(is.na(combined_data_df))
+
 
 
 

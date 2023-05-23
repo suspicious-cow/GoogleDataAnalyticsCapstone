@@ -191,11 +191,40 @@ information can be used to analyze the temporal patterns of bike usage.
 * __Station information:__ The data includes detailed information about the start 
 and end stations, including their names and IDs.
 
-```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
+## Missing Values
+Our next task is to look for missing data (or NA data, as it is commonly 
+called). Here is what we found:
 
+```{r, echo = TRUE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
 
+# Check for missing values
+colSums(is.na(combined_data_df))
 
 ```
+
+From this output, we can see that there are missing values (NA) in some of the 
+columns.
+
+- The `start_station_name` column has 902,896 missing values.
+- The `start_station_id` column has 903,028 missing values.
+- The `end_station_name` column has 964,949 missing values.
+- The `end_station_id` column has 965,090 missing values.
+- The `end_lat` and `end_lng` columns each have 6,290 missing values.
+
+The other columns (`ride_id`, `rideable_type`, `started_at`, `ended_at`, 
+`start_lat`, `start_lng`, and `member_casual`) do not have any missing values.
+
+Missing data can be problematic because it may skew the results of our analysis 
+or cause certain functions to fail. You will want to investigate why there are 
+missing values in the data and consider ways of handling it, such as filling 
+them in with an average or other statistic (imputation), or removing rows. 
+
+The differences in the number of missing values between the `start` and `end` 
+station names and IDs could indicate inconsistencies in data collection or 
+recording. This may require further investigation to ensure that any analyses 
+we conduct on this data are valid.
+
+
 
 \newpage
 # Appendix
