@@ -81,19 +81,37 @@ The data for this analysis is publicly available and located on Divvy's Amazon
 S3 storage. The data is titled as "Divvy Data." [@DivvyData2023]
 
 The data is organized in an anonymized format, detailing each trip's start and 
-end day/time, start and end stations, and rider type (Member, Single Ride, and 
-Day Pass). Trips taken by staff and any trips under 60 seconds in length have 
-been excluded from this dataset.
+end day/time, start and end stations, and rider type (Member or Casual). Trips 
+taken by staff and any trips under 60 seconds in length have been excluded from 
+this dataset.
 
-Given the anonymization and rigorous data handling practices outlined by Divvy, we can consider the data to be Reliable, Original, Comprehensive, Current, and Cited (ROCCC). However, some level of bias could be inherent as the data only includes riders who choose to use Divvy's services, and not all potential or actual cyclists in Chicago. Also, the credibility of the dataset is tied to Divvy's data collection and handling processes.
+Given the anonymization and rigorous data handling practices outlined by Divvy, 
+we can consider the data to be Reliable, Original, Comprehensive, Current, and 
+Cited (ROCCC). However, some level of bias could be inherent as the data only 
+includes riders who choose to use Divvy's services, and not all potential or 
+actual cyclists in Chicago. Also, the credibility of the dataset is tied to 
+Divvy's data collection and handling processes.
 
-The data is provided according to the Divvy Data License Agreement. Accessibility is facilitated through public download links, ensuring the data can be freely used for analysis while respecting privacy through anonymization. Security of the data in our analysis will be ensured by following best practices, such as secure data storage and handling.
+The data is provided according to the Divvy Data License Agreement. 
+Accessibility is facilitated through public download links, ensuring the data 
+can be freely used for analysis while respecting privacy through anonymization. 
+Security of the data in our analysis will be ensured by following best 
+practices, such as secure data storage and handling.
 
-Data integrity has been verified through initial exploratory data analysis to check for missing values, inconsistencies, or obvious outliers. Any issues found during this process will be documented and addressed appropriately.
+Data integrity has been verified through initial exploratory data analysis to 
+check for missing values, inconsistencies, or obvious outliers. Any issues found 
+during this process will be documented and addressed appropriately.
 
-This dataset is instrumental in answering our primary business question — understanding how annual members and casual riders use Cyclistic bikes differently. Each trip's information, coupled with the type of rider, will offer insights into the usage patterns of the two user groups.
+This dataset is instrumental in answering our primary business question — 
+understanding how annual members and casual riders use Cyclistic bikes 
+differently. Each trip's information, coupled with the type of rider, will offer 
+insights into the usage patterns of the two user groups.
 
-Potential problems with the data could include missing values, inconsistent data entries, or anomalies. These will be explored and addressed during the data cleaning and preprocessing stages of our analysis. If severe issues are encountered, they will be documented and taken into consideration when interpreting the analysis results.
+Potential problems with the data could include missing values, inconsistent data 
+entries, or anomalies. These will be explored and addressed during the data 
+cleaning and preprocessing stages of our analysis. If severe issues are 
+encountered, they will be documented and taken into consideration when 
+interpreting the analysis results.
 
 ```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
 # set a seed in case we use any random numbers
