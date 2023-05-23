@@ -397,6 +397,8 @@ Statistics</a></li>
 <li><a href="#key-decisions" id="toc-key-decisions">Key
 Decisions</a></li>
 <li><a href="#additional-data-changes" id="toc-additional-data-changes">Additional Data Changes</a></li>
+<li><a href="#removing-outliers" id="toc-removing-outliers">Removing
+Outliers</a></li>
 </ul></li>
 <li><a href="#analyze" id="toc-analyze">Analyze</a></li>
 <li><a href="#appendix" id="toc-appendix">Appendix</a>
@@ -501,8 +503,6 @@ taken into consideration when interpreting the analysis results.</p>
 <h2>Structure of the Data</h2>
 <p>We used the str() function in R to give us a detailed structure of
 the data.</p>
-<pre class="r"><code># examine the structure of the data
-str(combined_data_df)</code></pre>
 <pre><code>## spc_tbl_ [6,230,310 × 13] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
 ##  $ ride_id           : chr [1:6230310] &quot;3564070EEFD12711&quot; &quot;0B820C7FCF22F489&quot; &quot;89EEEE32293F07FF&quot; &quot;84D4751AEB31888D&quot; ...
 ##  $ rideable_type     : Factor w/ 3 levels &quot;classic_bike&quot;,..: 3 1 1 1 3 1 1 1 3 3 ...
@@ -566,15 +566,7 @@ IDs.</p></li>
 <p>Now we turn our attention to broad issues in the data if they exist.
 The first task we will undertake is to check for duplicate rows in our
 data.</p>
-<pre class="r"><code># Identify duplicates
-duplicates &lt;- duplicated(combined_data_df)
-
-# Count duplicates
-num_duplicates &lt;- sum(duplicates)
-
-# Show the number of duplicates
-print(num_duplicates)</code></pre>
-<pre><code>## [1] 0</code></pre>
+<pre><code>## Total number of duplicate rows found: 0</code></pre>
 <p>Fortunately, this dataset doesn’t have any duplicate data. We can now
 move on to other metrics.</p>
 </div>
@@ -582,8 +574,6 @@ move on to other metrics.</p>
 <h2>Missing Values</h2>
 <p>Our next task is to look for missing data (or NA data, as it is
 commonly called). Here is what we found:</p>
-<pre class="r"><code># Check for missing values
-colSums(is.na(combined_data_df))</code></pre>
 <pre><code>##            ride_id      rideable_type         started_at           ended_at 
 ##                  0                  0                  0                  0 
 ## start_station_name   start_station_id   end_station_name     end_station_id 
@@ -623,10 +613,8 @@ this data are valid.</p>
 </div>
 <div id="summary-statistics" class="section level2">
 <h2>Summary Statistics</h2>
-<p>Finally, we run some summary statistics to get an overall view of the
+<p>Now we an run some summary statistics to get an overall view of the
 data makeup and how we might approach our analysis.</p>
-<pre class="r"><code># Print detailed summary statistics of the dataframe
-skim(combined_data_df)</code></pre>
 <table>
 <caption>Data summary</caption>
 <tbody>
@@ -1011,25 +999,21 @@ added to make analysis of the specific day (e.g. Monday, Tuesday, etc…)
 a trip happened easier. This is converted to a factor for more advanced
 activities.</p></li>
 </ul>
-<pre class="r"><code># calculate the total ride time in minutes
-combined_data_df$ride_length &lt;- 
-    round((combined_data_df$ended_at - combined_data_df$started_at) / 60, 2)
-
-# Change the units attribute to &quot;minutes&quot;
-attr(combined_data_df$ride_length, &quot;units&quot;) &lt;- &quot;minutes&quot;
-
-
-# Create the &#39;day_of_week_start&#39; and &#39;day_of_week_end&#39; columns
-combined_data_df$day_of_week_start &lt;- wday(combined_data_df$started_at, label = TRUE)
-combined_data_df$day_of_week_end &lt;- wday(combined_data_df$ended_at, label = TRUE)
-
-# Convert the new columns to factors
-combined_data_df$day_of_week_start &lt;- as.factor(combined_data_df$day_of_week_start)
-combined_data_df$day_of_week_end &lt;- as.factor(combined_data_df$day_of_week_end)</code></pre>
+</div>
+<div id="removing-outliers" class="section level2">
+<h2>Removing Outliers</h2>
+<p>After adding the ride_length variable we discovered some outliers in
+the data. Specifically, we found start and end trip times that would
+result in a negative time and we found values that were well beyond the
+two day “normal” time for a ride. In total there were 1,346 of these
+rows. We opted to remove them for this dataset.</p>
 </div>
 </div>
 <div id="analyze" class="section level1">
 <h1>Analyze</h1>
+<p>Our analysis will traverse the entirety of the dataset. To get
+started, we wanted to present some basic metrics on ride length:</p>
+<pre><code>## The average rental time was 16.89 minutes long. The longest rental time was 2878.82 minutes and the shortest rental time was 0.02 minutes.</code></pre>
 <div style="page-break-after: always;"></div>
 </div>
 <div id="appendix" class="section level1">
@@ -1103,7 +1087,7 @@ duplicates &lt;- duplicated(combined_data_df)
 num_duplicates &lt;- sum(duplicates)
 
 # Show the number of duplicates
-print(num_duplicates)
+cat(&quot;Total number of duplicate rows found:&quot;,num_duplicates)
 
 
 # Check for missing values
@@ -1128,7 +1112,23 @@ combined_data_df$day_of_week_end &lt;- wday(combined_data_df$ended_at, label = T
 
 # Convert the new columns to factors
 combined_data_df$day_of_week_start &lt;- as.factor(combined_data_df$day_of_week_start)
-combined_data_df$day_of_week_end &lt;- as.factor(combined_data_df$day_of_week_end)</code></pre>
+combined_data_df$day_of_week_end &lt;- as.factor(combined_data_df$day_of_week_end)
+
+
+
+# Get rid of outliers by only accepting ride times that are less than two days 
+# and greater than zero
+combined_data_df &lt;- combined_data_df %&gt;% filter(ride_length &lt;= 2880 &amp; ride_length &gt; 0) 
+
+
+# ride_length metrics
+ride_length_mean &lt;- mean(as.numeric(combined_data_df$ride_length))
+ride_length_max &lt;- max(as.numeric(combined_data_df$ride_length))
+ride_length_min &lt;- min(as.numeric(combined_data_df$ride_length))
+
+cat(&quot;The average rental time was&quot;, round(ride_length_mean, 2), 
+    &quot;minutes long. The longest rental time was&quot;, ride_length_max,&quot;minutes&quot;,
+    &quot;and the shortest rental time was&quot;, ride_length_min, &quot;minutes.&quot;)</code></pre>
 </div>
 </div>
 

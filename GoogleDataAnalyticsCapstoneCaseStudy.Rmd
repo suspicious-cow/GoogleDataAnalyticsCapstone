@@ -157,7 +157,7 @@ interpreting the analysis results.
 ## Structure of the Data
 We used the str() function in R to give us a detailed structure of the data.  
 
-```{r, echo = TRUE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
+```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
 
 # examine the structure of the data
 str(combined_data_df)
@@ -195,7 +195,7 @@ and end stations, including their names and IDs.
 Now we turn our attention to broad issues in the data if they exist. The first 
 task we will undertake is to check for duplicate rows in our data.  
 
-```{r, echo = TRUE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
+```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
 
 # Identify duplicates
 duplicates <- duplicated(combined_data_df)
@@ -204,7 +204,7 @@ duplicates <- duplicated(combined_data_df)
 num_duplicates <- sum(duplicates)
 
 # Show the number of duplicates
-print(num_duplicates)
+cat("Total number of duplicate rows found:",num_duplicates)
 
 ```  
 
@@ -215,7 +215,7 @@ other metrics.
 Our next task is to look for missing data (or NA data, as it is commonly 
 called). Here is what we found:
 
-```{r, echo = TRUE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
+```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
 
 # Check for missing values
 colSums(is.na(combined_data_df))
@@ -244,11 +244,12 @@ station names and IDs could indicate inconsistencies in data collection or
 recording. This may require further investigation to ensure that any analyses 
 we conduct on this data are valid.
 
+
 ## Summary Statistics
-Finally, we run some summary statistics to get an overall view of the data 
+Now we an run some summary statistics to get an overall view of the data 
 makeup and how we might approach our analysis. 
 
-```{r, echo = TRUE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
+```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
 
 # Print detailed summary statistics of the dataframe
 skim(combined_data_df)
@@ -334,12 +335,16 @@ queries we anticipate. The changes are as follows:
 derived by subtracting `ended_at` from `started_from`. The results are in total 
 minutes elapsed for the ride.  
 
+* __Start Date:__ One new column (`started_date`) was added to strip out the 
+time from the original `started_at` column. This allows for plots to examine 
+rental trends over time by day. 
+
 * __Day of Week:__ A two new columns entitled `day_of_week_start` and 
 `day_of_week_end` were added to make analysis of the specific day (e.g. Monday, 
 Tuesday, etc...) a trip happened easier. This is converted to a factor for more 
 advanced activities.  
 
-```{r, echo = TRUE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
+```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
 
 # calculate the total ride time in minutes
 combined_data_df$ride_length <- 
@@ -348,6 +353,8 @@ combined_data_df$ride_length <-
 # Change the units attribute to "minutes"
 attr(combined_data_df$ride_length, "units") <- "minutes"
 
+# Add a new column for the date without the time
+combined_data_df$started_date <- as.Date(combined_data_df$started_at)
 
 # Create the 'day_of_week_start' and 'day_of_week_end' columns
 combined_data_df$day_of_week_start <- wday(combined_data_df$started_at, label = TRUE)
@@ -360,17 +367,74 @@ combined_data_df$day_of_week_end <- as.factor(combined_data_df$day_of_week_end)
 
 ```
 
+## Removing Outliers
+After adding the ride_length variable we discovered some outliers in the data. 
+Specifically, we found start and end trip times that would result in a negative 
+time and we found values that were well beyond the two day "normal" time for a 
+ride. In total there were 1,346 of these rows. We opted to remove them for this 
+dataset.
 
-# Analyze
-Our analysis will traverse the entirety of the dataset. To get started, we 
-wanted to present some key metrics:
+```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
 
-```{r, echo = TRUE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
-
+# Get rid of outliers by only accepting ride times that are less than two days 
+# and greater than zero
+combined_data_df <- combined_data_df %>% filter(ride_length <= 2880 & ride_length > 0) 
 
 
 ```
 
+
+# Analyze
+
+## Rental Basic Metrics 
+To get started, we wanted to present some basic metrics on ride length:  
+
+```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
+# ride_length metrics
+ride_length_mean <- mean(as.numeric(combined_data_df$ride_length))
+ride_length_max <- max(as.numeric(combined_data_df$ride_length))
+ride_length_min <- min(as.numeric(combined_data_df$ride_length))
+
+cat("The average rental time was", round(ride_length_mean, 2), 
+    "minutes long.\n The longest rental time was", ride_length_max,"minutes\n",
+    "and the shortest rental time was", ride_length_min, "minutes.")
+
+
+```
+
+As we can see, the average rental is about seventeen minutes but the range of 
+rental times varies widely from a few seconds to two days. Because we removed 
+outliers we may have removed legitimate rentals over two days; however they 
+would be anomalies and not indicative of the overall data. 
+
+## Daily Bike Rentals
+It is important to take a step back and look at the entire year of data we have 
+to get some perspective on rental trends. The graph below shows the daily bike 
+rentals from April 2022 to April 2023. 
+
+```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
+
+# Group by date and count the number of rides each day
+daily_counts <- combined_data_df %>% group_by(started_date) %>% summarise(count = n())
+
+# Line graph for the year with trendline
+ggplot(daily_counts, aes(x = started_date, y = count)) +
+  geom_line(color = "darkblue") +
+  geom_smooth(method = "loess", se = FALSE, color = "red", linetype="dashed") +
+  labs(x = "Date", 
+       y = "Number of Rentals", 
+       title = "Daily Bike Rentals", 
+       subtitle = "With trend line",
+       caption = "Source: Your Data Source") +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold", size = 20),
+        plot.subtitle = element_text(face = "italic", size = 12),
+        axis.title = element_text(face = "bold", size = 14),
+        axis.text = element_text(size = 12))
+
+
+
+```
 
 
 \newpage

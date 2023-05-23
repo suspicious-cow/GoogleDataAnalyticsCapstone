@@ -72,3 +72,50 @@ combined_data_df$day_of_week_end <- wday(combined_data_df$ended_at, label = TRUE
 # Convert the new columns to factors
 combined_data_df$day_of_week_start <- as.factor(combined_data_df$day_of_week_start)
 combined_data_df$day_of_week_end <- as.factor(combined_data_df$day_of_week_end)
+
+# ride_length metrics
+ride_length_mean <- mean(as.numeric(combined_data_df$ride_length))
+ride_length_max <- max(as.numeric(combined_data_df$ride_length))
+ride_length_min <- min(as.numeric(combined_data_df$ride_length))
+
+cat("The average rental time was", round(ride_length_mean, 2), 
+    "minutes long.\n The longest rental time was", ride_length_max,"minutes\n",
+    "and the shortest rental time was", ride_length_min, "minutes.")
+
+str(combined_data_df)
+
+
+
+# Get rid of outliers by only accepting ride times that are less than two days 
+# and greater than zero
+combined_data_df <- combined_data_df %>% filter(ride_length <= 2880 & ride_length > 0) 
+
+
+
+
+# Add a new column for the date without the time
+combined_data_df$started_date <- as.Date(combined_data_df$started_at)
+
+# Group by date and count the number of rides each day
+daily_counts <- combined_data_df %>% group_by(started_date) %>% summarise(count = n())
+
+# Create the line graph
+ggplot(daily_counts, aes(x=started_date, y=count)) +
+    geom_line() +
+    labs(x = "Date", y = "Number of Rentals", title = "Daily Bike Rentals") +
+    theme_minimal()
+
+# super line plot
+ggplot(daily_counts, aes(x = started_date, y = count)) +
+    geom_line(color = "darkblue") +
+    geom_smooth(method = "loess", se = FALSE, color = "red", linetype="dashed") +
+    labs(x = "Date", 
+         y = "Number of Rentals", 
+         title = "Daily Bike Rentals", 
+         subtitle = "With trend line",
+         caption = "Source: Your Data Source") +
+    theme_minimal() +
+    theme(plot.title = element_text(face = "bold", size = 20),
+          plot.subtitle = element_text(face = "italic", size = 12),
+          axis.title = element_text(face = "bold", size = 14),
+          axis.text = element_text(size = 12))
