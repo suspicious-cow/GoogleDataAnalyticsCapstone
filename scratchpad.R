@@ -3,7 +3,7 @@ set.seed(1337)
 
 
 # Set the names of the packages and libraries you want to install
-required_libraries <- c("tidyverse", "purrr")
+required_libraries <- c("tidyverse", "purrr", "knitr")
 
 # Install missing packages and load all required libraries
 for (lib in required_libraries) {
@@ -13,18 +13,34 @@ for (lib in required_libraries) {
   library(lib, character.only = TRUE)
 }
 
-# get file list
-file_list <- list.files(path = "SourceData/", pattern = "*.csv", full.names = TRUE)
+# load all the cycling data for analysis
+# our data runs from 04/2022 to 04/2023
+if(file.exists("combined_data_df.rds")) {
+    # read in our combined data
+    combined_data_df <- readRDS("combined_data_df.rds")
+    
+} else {
+    
+    # get file list
+    file_list <- list.files(path = "SourceData/", pattern = "*.csv", full.names = TRUE)
+    
+    # read and combine files
+    combined_data <- map_df(file_list, read_csv)
+    
+    # convert ridable_type and member_casual into factors
+    combined_data$rideable_type <- as.factor(combined_data$rideable_type)
+    combined_data$member_casual <- as.factor(combined_data$member_casual)
+    
+    # save the combined_data object so we don't have to reload this data again
+    # unless it changes
+    write_rds(combined_data, "combined_data_df.rds")
+}
 
-# read and combine files
-combined_data <- map_df(file_list, read_csv)
 
-# save the combined file
-write_csv(combined_data, "2022-04_to_2023-04-divvy-tripdata.csv")
 
-# save the combined_data object so we don't have to reload this data again
-# unless it changes
-write_rds(combined_data, "combined_data_df.rds")
 
-str(combined_data)
-colnames(combined_data)
+
+
+
+
+

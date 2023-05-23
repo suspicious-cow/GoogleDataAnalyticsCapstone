@@ -1,0 +1,149 @@
+---
+title: "Title Here"
+author: "Zain Naboulsi"
+date: "2023-03-22"
+bibliography: references.bib
+output:
+  html_document:
+    toc: yes
+    
+  pdf_document:
+    toc: yes
+    
+editor_options: 
+  markdown: 
+    wrap: 80
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Abstract
+Cyclistic, a popular bike-share company based in Chicago, strives to maximize 
+its annual memberships for sustainable growth. The company has an existing user 
+base composed of both casual riders (who opt for single-ride or full-day passes) 
+and annual members. The focus of this case study is to understand the 
+utilization patterns of these two user groups, as the company believes that 
+converting casual riders into annual members can significantly enhance their 
+profitability. To devise effective marketing strategies for this conversion, the 
+case study will delve into questions that probe how these two user groups use 
+Cyclistic bikes differently, why casual riders might opt for annual memberships, 
+and how digital media can facilitate this conversion.
+
+This study is divided into six stages: Ask, Prepare, Process, Analyze, Share, 
+and Act. Each section will come with additional detail and build on the previous 
+section. We hope you enjoy reading this analysis as much as we enjoyed making
+it. 
+
+
+# Ask
+The primary business question we aim to address is: How do annual members and 
+casual riders use Cyclistic bikes differently? This question is fundamental to 
+developing a marketing strategy that can effectively convert casual riders into 
+annual members.
+
+To answer this question, we will delve into the following topics:
+
+1. *Duration and frequency of rides*: We will analyze data to understand the 
+typical length and frequency of rides for both user groups. Are there noticeable 
+differences between casual riders and annual members? Are members using the 
+bikes more frequently or for longer duration?
+
+2. *Purpose of rides*: We aim to determine the typical purpose of rides for both 
+groups. Do casual riders primarily use the bikes for leisure, while members use 
+them more for daily commuting? Or is there an overlap?
+
+3. *Ride timings*: We'll investigate if there's a difference in the time of day, 
+day of the week, or month of the year when the two user groups typically use the 
+bikes.
+
+4. *Bike preferences*: Given that Cyclistic offers various bike options, we will 
+examine if there's a pattern in the type of bike preferred by the two user 
+groups.
+
+Answering these questions will provide insights into the riding patterns of the 
+two groups, and will be instrumental in forming the foundation for a marketing 
+strategy aimed at converting casual riders into annual members. The strategy 
+will be developed in alignment with these insights, addressing the unique needs 
+and behaviors of casual riders to motivate their transition to becoming annual 
+members.
+
+Cyclistic's collected data forms the backbone of this analysis. For 
+transparency, we have included the source code in the paper's Appendix. We 
+strive to communicate our findings clearly, pairing concise language with 
+comprehensible visualizations and straightforward recommendations.
+
+# Prepare
+**Prepare**
+
+The data for this analysis is publicly available and located on Divvy's Amazon 
+S3 storage. The data is titled as "Divvy Data." [@DivvyData2023]
+
+The data is organized in an anonymized format, detailing each trip's start and 
+end day/time, start and end stations, and rider type (Member, Single Ride, and 
+Day Pass). Trips taken by staff and any trips under 60 seconds in length have 
+been excluded from this dataset.
+
+Given the anonymization and rigorous data handling practices outlined by Divvy, we can consider the data to be Reliable, Original, Comprehensive, Current, and Cited (ROCCC). However, some level of bias could be inherent as the data only includes riders who choose to use Divvy's services, and not all potential or actual cyclists in Chicago. Also, the credibility of the dataset is tied to Divvy's data collection and handling processes.
+
+The data is provided according to the Divvy Data License Agreement. Accessibility is facilitated through public download links, ensuring the data can be freely used for analysis while respecting privacy through anonymization. Security of the data in our analysis will be ensured by following best practices, such as secure data storage and handling.
+
+Data integrity has been verified through initial exploratory data analysis to check for missing values, inconsistencies, or obvious outliers. Any issues found during this process will be documented and addressed appropriately.
+
+This dataset is instrumental in answering our primary business question — understanding how annual members and casual riders use Cyclistic bikes differently. Each trip's information, coupled with the type of rider, will offer insights into the usage patterns of the two user groups.
+
+Potential problems with the data could include missing values, inconsistent data entries, or anomalies. These will be explored and addressed during the data cleaning and preprocessing stages of our analysis. If severe issues are encountered, they will be documented and taken into consideration when interpreting the analysis results.
+
+```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
+# set a seed in case we use any random numbers
+set.seed(1337)
+
+
+# Set the names of the packages and libraries we want to install
+required_libraries <- c("tidyverse", "purrr", "knitr")
+
+# Install missing packages and load all required libraries
+for (lib in required_libraries) {
+  if (!requireNamespace(lib, quietly = TRUE)) {
+    install.packages(lib)
+  }
+  library(lib, character.only = TRUE)
+}
+
+# load all the cycling data for analysis
+# our data runs from 04/2022 to 04/2023
+if(file.exists("combined_data_df.rds")) {
+    # read in our combined data
+    combined_data_df <- readRDS("combined_data_df.rds")
+    
+} else {
+    
+    # get file list
+    file_list <- list.files(path = "SourceData/", pattern = "*.csv", full.names = TRUE)
+    
+    # read and combine files
+    combined_data <- map_df(file_list, read_csv)
+    
+    # convert ridable_type and member_casual into factors
+    combined_data$rideable_type <- as.factor(combined_data$rideable_type)
+    combined_data$member_casual <- as.factor(combined_data$member_casual)
+    
+    # save the combined_data object so we don't have to reload this data again
+    # unless it changes
+    write_rds(combined_data, "combined_data_df.rds")
+}
+
+```
+
+\newpage
+# Appendix
+
+## References  
+
+<div id="refs"></div> 
+
+## All Source Code
+
+```{r ref.label = knitr::all_labels(appendix == TRUE), echo=TRUE, eval=FALSE}
