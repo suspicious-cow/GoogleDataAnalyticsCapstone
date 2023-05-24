@@ -208,3 +208,44 @@ ggplot(casual_daily_bike_counts, aes(x = started_date, y = count, color = rideab
 
 # ================================================
 
+
+
+# Extract hour and day of week from started_at for members
+member_df <- member_df %>%
+    mutate(hour = hour(started_at),
+           day = wday(started_at, label = TRUE)) %>%
+    group_by(hour, day) %>%
+    summarise(freq = n())
+
+# Extract hour and day of week from started_at for casual customers
+casual_df <- casual_df %>%
+    mutate(hour = hour(started_at),
+           day = wday(started_at, label = TRUE)) %>%
+    group_by(hour, day) %>%
+    summarise(freq = n())
+
+
+
+# Create the heatmap for member rentals
+ggplot(member_df, aes(x = day, y = hour, fill = freq)) +
+    geom_tile(color = "white") +
+    scale_fill_gradient(low = "light blue", high = "dark blue") +
+    labs(title = "Member Rentals by Time and Day of Week",
+         x = "Day of Week",
+         y = "Hour of Day",
+         fill = "Frequency") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+
+
+
+# Create the heatmap for member rentals
+ggplot(casual_df, aes(x = day, y = hour, fill = freq)) +
+    geom_tile(color = "white") +
+    scale_fill_gradient(low = "light blue", high = "dark blue") +
+    labs(title = "Casual Rentals by Time and Day of Week",
+         x = "Day of Week",
+         y = "Hour of Day",
+         fill = "Frequency") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))

@@ -1,7 +1,7 @@
 ---
 title: "Case Study: How Does a Bike-Share Navigate Speedy Success?"
 author: "Zain Naboulsi"
-date: "2023-03-22"
+date: "2023-05-23"
 bibliography: references.bib
 output:
   html_document:
@@ -73,18 +73,16 @@ case study will delve into questions that probe how these two user groups use
 Cyclistic bikes differently, why casual riders might opt for annual memberships, 
 and how digital media can facilitate this conversion.
 
-This study is divided into six stages: Ask, Prepare, Process, Analyze, Share, 
-and Act. Each section will come with additional detail and build on the previous 
-section. We hope you enjoy reading this analysis as much as we enjoyed making
-it. All work was done with the R Language [@rbase] in R Studio [@rstudio].
 
+# Business Questions  
+The primary business questions we seek to address are: 
 
-# Business Questions
-The primary business questions we aim to address are: 
-* How do annual members and casual riders use Cyclistic bikes differently?
-* Why would casual riders buy Cyclistic annual memberships?
+* How do annual members and casual riders use Cyclistic bikes differently?  
+
+* Why would casual riders buy Cyclistic annual memberships?  
+
 * How can Cyclistic use digital media to influence casual riders to become 
-members?
+members?  
 
 To answer these questions, we will delve into the following topics:
 
@@ -102,11 +100,11 @@ examine if there's a pattern in the type of bike preferred by the two user
 groups.
 
 Answering these questions will provide insights into the riding patterns of the 
-two groups (member and casual renters), and will be instrumental in forming the 
-foundation for a marketing strategy aimed at converting casual riders into 
-annual members. The strategy will be developed in alignment with these insights, 
-addressing the unique needs and behaviors of casual riders to motivate their 
-transition to becoming annual members.
+two groups (annual member and casual renters), and will be instrumental in 
+forming the foundation for a marketing strategy aimed at converting casual 
+riders into annual members. The strategy will be developed in alignment with 
+these insights, addressing the unique needs and behaviors of casual riders to 
+motivate their transition to becoming annual members.
 
 Cyclistic's collected data forms the backbone of this analysis. For 
 transparency, we have included the source code in the paper's Appendix. We 
@@ -115,8 +113,9 @@ comprehensible visualizations and straightforward recommendations.
 
 # About the Data  
 
-The data for this analysis is publicly available and located on Divvy's Amazon 
-S3 storage. The data is titled as "Divvy Data." [@DivvyData2023]
+The data for this analysis is publicly available and located on Divvy's 
+(aka Cyclistic) Amazon S3 storage. The data is titled as 
+"Divvy Data." [@DivvyData2023]
 
 The data is organized in an anonymized format, detailing each trip's start and 
 end day/time, start and end stations, and rider type (Member or Casual). Trips 
@@ -190,7 +189,8 @@ and end stations, including their names and IDs.
 
 ## Duplicate Observations
 Now we turn our attention to broad issues in the data if they exist. The first 
-task we will undertake is to check for duplicate rows in our data.  
+task we will undertake is to check for duplicate rows in our data. Fortunately, 
+this dataset doesn't have any duplicate data. 
 
 ```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
 
@@ -205,8 +205,7 @@ cat("Total number of duplicate rows found:",num_duplicates)
 
 ```  
 
-Fortunately, this dataset doesn't have any duplicate data. We can now move on to 
-other metrics.  
+
 
 ## Missing Values
 Our next task is to look for missing data (or NA data, as it is commonly 
@@ -268,7 +267,7 @@ missing values, given that the complete rate is around 0.85. This could be a
 potential area of concern depending on how we want to use this data.
 
 * __Unique Values:__ The ride_id variable is unique for every row, which 
-suggests that it might be a unique identifier for each ride.
+correctly suggests that it is a unique identifier for each ride.
 
 * __Rideable Type:__ There are three types of bikes used in these rides: 
 electric bikes, classic bikes, and docked bikes. The most common type of bike 
@@ -385,10 +384,16 @@ combined_data_df <- combined_data_df %>% filter(ride_length <= 2880 &
 ```
 
 
-# Analyze
+# Analysis of the Data
 
 ## Rental Basic Metrics 
-To get started, we wanted to present some basic metrics on ride length:  
+Overall, it appears that casual customers rent bikes for longer periods of time 
+compared to members. This information can be valuable for our strategic 
+planning. For instance, it might be worth exploring if there are ways to 
+encourage casual customers to become members, given their high usage. It's also 
+important to explore the reasons behind the high maximum ride lengths, 
+particularly for casual customers, as this might point to potential misuse or 
+misunderstanding of rental policies. 
 
 ```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
 
@@ -418,19 +423,18 @@ print(ride_length_metrics)
 
 ```
 
-Overall, it appears that casual customers rent bikes for longer periods of time 
-compared to members. This information can be valuable for our strategic 
-planning. For instance, it might be worth exploring if there are ways to 
-encourage casual customers to become members, given their high usage. It's also 
-important to explore the reasons behind the high maximum ride lengths, 
-particularly for casual customers, as this might point to potential misuse or 
-misunderstanding of rental policies.
 
-
-## Daily Bike Rentals Over Time
+## Daily Bike Rentals Over Time  
 Now let's take a step back and look at the entire year of data we have 
 to get some perspective on rental trends between the two groups. The graph below 
-shows the daily bike rentals from April 2022 to April 2023 for members. 
+shows the daily bike rentals from April 2022 to April 2023. 
+
+As we can see, there is a definitive seasonal trend to bike rentals overall and 
+particularly between the two groups. Most notably, the member rentals decline in 
+the winter months but almost never "bottom out". Whereas, the casual rentals go 
+very flat in the winter months but make up for it in volume during the warmer 
+times. If we are looking to convert casual riders to members, an incentive that 
+can be used during the warmer months should be considered. 
 
 ```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
 
@@ -473,14 +477,8 @@ ggplot(daily_counts_casual, aes(x = started_date, y = count)) +
 
 ```
 
-As we can see, there is a definitive seasonal trend to bike rentals overall and 
-particularly between the two groups. Most notably, the member rentals decline in 
-the winter months but almost never "bottom out". Whereas, the casual rentals go 
-very flat in the winter months but make up for it in volume during the warmer 
-times. If we are looking to convert casual riders to members, an incentive that 
-can be used during the warmer months should be considered. 
 
-## Bike Preferences Overall
+## Bike Preferences Overall  
 When we looked at bike preference type, we found that members, marginally, 
 prefer classic bikes. The same is not true for casual riders as they tend to 
 prefer electric bikes. Perhaps some incentives around electric bike rentals 
@@ -520,6 +518,68 @@ ggplot(bike_pref_df, aes(x = rideable_type, y = count, fill = user_type)) +
 
 
 ```
+
+## Day and Time Preferences
+Now that we know the seasonal differences in rentals, we can turn our attention 
+to the day and time when most rentals happen for our two groups. The heat maps 
+below show us this information. 
+
+For member rentals, we can clearly see that most rentals happen Monday 
+through Thursday. They tend to happen more in the morning and at night. 
+Surprisingly, fewer rentals happen in the morning than at night which might 
+suggest some riders are taking alternate transport to work and then renting a 
+bike at the end of the day to go home. Further study to discover what those 
+modes might be would be useful in building a marketing strategy. 
+
+For casual rentals, the data is reversed. Most rentals happen on the weekends 
+and the rentals are fairly consistent throughout those days. This suggests that 
+casual rentals are being used for leisure and not work transportation. 
+
+```{r, echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, appendix = TRUE}
+
+# Extract hour and day of week from started_at for members
+member_df <- member_df %>%
+    mutate(hour = hour(started_at),
+           day = wday(started_at, label = TRUE)) %>%
+    group_by(hour, day) %>%
+    summarise(freq = n())
+
+# Extract hour and day of week from started_at for casual customers
+casual_df <- casual_df %>%
+    mutate(hour = hour(started_at),
+           day = wday(started_at, label = TRUE)) %>%
+    group_by(hour, day) %>%
+    summarise(freq = n())
+
+
+
+# Create the heatmap for member rentals
+ggplot(member_df, aes(x = day, y = hour, fill = freq)) +
+    geom_tile(color = "white") +
+    scale_fill_gradient(low = "light blue", high = "dark blue") +
+    labs(title = "Member Rentals by Time and Day of Week",
+         x = "Day of Week",
+         y = "Hour of Day",
+         fill = "Frequency") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+
+
+
+# Create the heatmap for member rentals
+ggplot(casual_df, aes(x = day, y = hour, fill = freq)) +
+    geom_tile(color = "white") +
+    scale_fill_gradient(low = "light blue", high = "dark blue") +
+    labs(title = "Casual Rentals by Time and Day of Week",
+         x = "Day of Week",
+         y = "Hour of Day",
+         fill = "Frequency") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+
+
+```
+
 
 ## Bike Preferences Over Time
 Looking at bike preferences over time between the two groups we don't see many 
@@ -568,14 +628,43 @@ ggplot(casual_daily_bike_counts, aes(x = started_date, y = count, color = rideab
 
 ```
 
-# Share
-This paper serves as our vehicle for sharing the insights gained. In it you will 
-find all the relevant visuals as well as the source code so the results can be 
-reproduced independently. Questions or comments should be directed to Zain 
-Naboulsi. 
+# Conclusion  
 
-# Conclusion
+Upon examining the bike-sharing data from  Cyclistic, we've unearthed several key insights that could steer the company's strategic decision-making, especially when it comes to converting casual riders into members:
 
+1. __Seasonality__: We observed a clear pattern of bike rentals across the 
+seasons. Both members and casual riders tend to rent more during warmer months 
+and less during winter. However, members' usage is steadier across the year, 
+while casual riders' rentals significantly drop during winter. Therefore, 
+memberships offer a consistent revenue stream across the year.
+
+2. __Rental Duration__: Casual riders appear to rent bikes for longer periods 
+than members. This trend could indicate that casual riders embark on longer, 
+less hurried trips. Understanding the reasons behind these long rides could 
+guide our marketing strategies to convert more casual riders into members.
+
+3. __Bike Preference__: Members seem to prefer classic bikes slightly more than 
+casual riders who lean towards electric bikes. Creating incentives related to 
+electric bike rentals could persuade casual riders to sign up for a membership.
+
+4. __Day and Time__: Members usually rent bikes on weekdays during commute 
+hours, suggesting that they use the service for work or school transportation. 
+In contrast, casual riders tend to rent bikes on weekends throughout the day, 
+indicating leisure usage. Marketing campaigns can highlight the benefits of 
+membership for both commuting and leisure to attract casual riders.
+
+5. __Data Quality__: We noticed some areas where the data quality could be 
+improved. Specifically, the absence of data in the start and end station names 
+and IDs could limit the depth of our analysis. Enhanced data collection or 
+cleaning methods could improve this aspect and provide more valuable data for 
+future analysis.
+
+In conclusion, these findings can help Cyclistic design targeted marketing 
+strategies to convert casual riders into members. For instance, promoting 
+membership benefits for commuting and leisure, offering incentives for electric 
+bike rentals, and intensifying marketing efforts during the warm seasons when 
+casual usage soars. Improving data collection practices could provide a richer 
+data set, which would be a powerful asset for future decision-making.
 
 # Further Study
 To make predictions about when a casual rider might become a member, we need 
