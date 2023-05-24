@@ -75,14 +75,9 @@ and how digital media can facilitate this conversion.
 
 
 # Business Questions  
-The primary business questions we seek to address are: 
+The primary business question we seek to address is: 
 
-* How do annual members and casual riders use Cyclistic bikes differently?  
-
-* Why would casual riders buy Cyclistic annual memberships?  
-
-* How can Cyclistic use digital media to influence casual riders to become 
-members?  
+**How do annual members and casual riders use Cyclistic bikes differently?**  
 
 To answer these questions, we will delve into the following topics:
 
@@ -630,7 +625,9 @@ ggplot(casual_daily_bike_counts, aes(x = started_date, y = count, color = rideab
 
 # Conclusion  
 
-Upon examining the bike-sharing data from  Cyclistic, we've unearthed several key insights that could steer the company's strategic decision-making, especially when it comes to converting casual riders into members:
+Upon examining the bike-sharing data from  Cyclistic, we've unearthed several 
+key insights that could steer the company's strategic decision-making, 
+especially when it comes to converting casual riders into members:
 
 1. __Seasonality__: We observed a clear pattern of bike rentals across the 
 seasons. Both members and casual riders tend to rent more during warmer months 
