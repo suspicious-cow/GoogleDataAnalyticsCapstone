@@ -79,13 +79,14 @@ section. We hope you enjoy reading this analysis as much as we enjoyed making
 it. All work was done with the R Language [@rbase] in R Studio [@rstudio].
 
 
-# Ask
-The primary business question we aim to address is: How do annual members and 
-casual riders use Cyclistic bikes differently? This question is fundamental to 
-developing a marketing strategy that can effectively convert casual riders into 
-annual members.
+# Business Questions
+The primary business questions we aim to address are: 
+* How do annual members and casual riders use Cyclistic bikes differently?
+* Why would casual riders buy Cyclistic annual memberships?
+* How can Cyclistic use digital media to influence casual riders to become 
+members?
 
-To answer this question, we will delve into the following topics:
+To answer these questions, we will delve into the following topics:
 
 1. *Duration and frequency of rides:* We will analyze data to understand the 
 typical length of rides for both user groups. Are there noticeable 
@@ -101,18 +102,18 @@ examine if there's a pattern in the type of bike preferred by the two user
 groups.
 
 Answering these questions will provide insights into the riding patterns of the 
-two groups, and will be instrumental in forming the foundation for a marketing 
-strategy aimed at converting casual riders into annual members. The strategy 
-will be developed in alignment with these insights, addressing the unique needs 
-and behaviors of casual riders to motivate their transition to becoming annual 
-members.
+two groups (member and casual renters), and will be instrumental in forming the 
+foundation for a marketing strategy aimed at converting casual riders into 
+annual members. The strategy will be developed in alignment with these insights, 
+addressing the unique needs and behaviors of casual riders to motivate their 
+transition to becoming annual members.
 
 Cyclistic's collected data forms the backbone of this analysis. For 
 transparency, we have included the source code in the paper's Appendix. We 
 strive to communicate our findings clearly, pairing concise language with 
 comprehensible visualizations and straightforward recommendations.
 
-# Prepare  
+# About the Data  
 
 The data for this analysis is publicly available and located on Divvy's Amazon 
 S3 storage. The data is titled as "Divvy Data." [@DivvyData2023]
@@ -286,15 +287,15 @@ from 1st April 2022 to 30th April 2023, so just over a year's worth of ride
 data.
 
 
-# Process
+# Processing the Data
 Turning our attention to processing the data, we can review what decisions we 
 have made thus far and augment the data as needed to facilitate the analysis 
 process coming up. 
 
 ## Key Decisions
 Here are the decisions made so far:
-* __Tools chosen__ include R programming language along with the `tidyverse`, `purrr`, 
-`knitr`, `skimr`, and `readr` libraries. The reason for choosing these tools is 
+* __Tools chosen__ include R programming language along with the `tidyverse`, 
+`purrr`, `knitr`, `skimr`, and `readr` libraries. The reason for choosing these tools is 
 their strength in data manipulation, visualization, and analysis. `tidyverse` 
 includes several useful packages for data cleaning and analysis, while `purrr` 
 enhances R's functional programming capabilities. `knitr` provides dynamic 
@@ -566,6 +567,36 @@ ggplot(casual_daily_bike_counts, aes(x = started_date, y = count, color = rideab
 
 
 ```
+
+# Share
+This paper serves as our vehicle for sharing the insights gained. In it you will 
+find all the relevant visuals as well as the source code so the results can be 
+reproduced independently. Questions or comments should be directed to Zain 
+Naboulsi. 
+
+# Conclusion
+
+
+# Further Study
+To make predictions about when a casual rider might become a member, we need 
+more comprehensive data. This includes tracking individual user behavior over a 
+period of time - observing frequency of rides, duration, preferred stations, and 
+other relevant features. It is essential to have data where we see casual riders 
+transitioning to become members.
+
+With the appropriate data, we could apply techniques such as survival analysis 
+or other time-to-event models. These models could potentially predict the timing 
+of a casual rider converting to a member.
+
+However, we should recognize the complexity of this task. Numerous factors 
+influence the decision of a casual rider to become a member. These factors can 
+range from personal financial circumstances, lifestyle choices, and the quality 
+of their experiences with the service. Understanding these nuances will require 
+a multi-dimensional approach and thoughtful interpretation of data.
+
+Therefore, it's crucial that we broaden our data collection and analysis to 
+better understand these dynamics. By doing so, we will be able to create  
+accurate models and develop strategic insights to drive membership growth.
 
 
 \newpage

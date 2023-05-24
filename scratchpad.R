@@ -206,3 +206,5 @@ ggplot(casual_daily_bike_counts, aes(x = started_date, y = count, color = rideab
     theme_minimal()
 
 
+# ================================================
+
