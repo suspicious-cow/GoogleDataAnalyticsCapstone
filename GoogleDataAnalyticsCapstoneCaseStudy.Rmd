@@ -6,14 +6,18 @@ bibliography: references.bib
 output:
   html_document:
     toc: yes
+    df_print: paged
     
   pdf_document:
     toc: yes
-    
+    includes:
+      in_header: header.tex
+
 editor_options: 
   markdown: 
     wrap: 80
 ---
+
 
 
 ```{r setup, include=FALSE}
@@ -74,8 +78,8 @@ Cyclistic bikes differently, why casual riders might opt for annual memberships,
 and how digital media can facilitate this conversion.
 
 
-# Business Questions  
-The primary business question we seek to address is: 
+# Primary Business Question  
+The main business question we seek to address is: 
 
 **How do annual members and casual riders use Cyclistic bikes differently?**  
 
@@ -663,6 +667,30 @@ bike rentals, and intensifying marketing efforts during the warm seasons when
 casual usage soars. Improving data collection practices could provide a richer 
 data set, which would be a powerful asset for future decision-making.
 
+# Recommendations
+Based on our analysis, we offer the following top three recommendations:
+
+1. __Develop Seasonal Marketing Campaigns__: Since bike rentals show a clear 
+seasonal trend with casual riders renting more during warmer months, consider 
+developing marketing campaigns that align with this trend. Use targeted 
+advertising during these periods to highlight the benefits of membership, 
+possibly offering seasonal discounts or promotional codes to incentivize casual 
+riders to convert into members.
+
+2. __Promote Electric Bikes__: As casual riders show a preference for electric 
+bikes, there could be potential in offering membership benefits specifically 
+related to these bikes. Special member rates, priority access, or loyalty 
+rewards for electric bike usage could appeal to these casual riders and motivate 
+them to sign up for membership.
+
+3. __Highlight Membership Benefits for Leisure and Commute__: Given the 
+differing usage patterns between members and casual users, consider tailoring 
+communication to highlight the benefits of membership for both commuting and 
+leisure use. For instance, emphasize the cost-efficiency of membership for 
+weekday commuting to work or school, and the convenience and enjoyment for 
+weekend leisure rides. This dual-focused approach could resonate with casual 
+riders who are using the service for different purposes.
+
 # Further Study
 To make predictions about when a casual rider might become a member, we need 
 more comprehensive data. This includes tracking individual user behavior over a 
@@ -681,7 +709,7 @@ of their experiences with the service. Understanding these nuances will require
 a multi-dimensional approach and thoughtful interpretation of data.
 
 Therefore, it's crucial that we broaden our data collection and analysis to 
-better understand these dynamics. By doing so, we will be able to create  
+better understand these dynamics. By doing so, we will be able to create 
 accurate models and develop strategic insights to drive membership growth.
 
 
@@ -693,5 +721,12 @@ accurate models and develop strategic insights to drive membership growth.
 <div id="refs"></div>  
 
 ## Source Code  
+All source code is written in the R Programming Language [@rbase] using the 
+R Studio IDE [@rstudio]. The packages used include the popular tidyverse 
+[@tidyverse] set of packages for doing most of the heavy lifting in the code, 
+knitr [@knitr] for rendering the R Markdown [@rmarkdown] documents, and 
+skimr [@skimr] for creating detailed summaries of the data. Finally, for 
+generating the visuals, we used the ggplot2 [@ggplot2] package. 
+
 
 ```{r ref.label = knitr::all_labels(appendix == TRUE), echo=TRUE, eval=FALSE}
